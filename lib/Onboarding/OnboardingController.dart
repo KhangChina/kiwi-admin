@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:kiwi_admin/Main/LayoutMain.dart';
+import 'package:kiwi_admin/Login/LoginScreens.dart';
 
 class OnboardingController extends GetxController {
   static OnboardingController get instance => Get.find();
@@ -38,7 +38,7 @@ class OnboardingController extends GetxController {
       textLogin.value = "Login";
     }
     if (currentPageIndex.value >= (count - 1)) {
-      Get.off(() => LayoutMainScreens());
+      Get.off(() => LoginScreens());
       return;
     }
 
@@ -56,7 +56,7 @@ class OnboardingController extends GetxController {
   }
 
   void skipToMain() {
-    Get.off(() => LayoutMainScreens());
+    Get.off(() => LoginScreens());
     return;
   }
 }

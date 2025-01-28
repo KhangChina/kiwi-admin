@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kiwi_admin/Login/LoginController.dart';
+import 'package:kiwi_admin/Register/RegisterController.dart';
 
-class LoginScreens extends StatelessWidget {
-  const LoginScreens({super.key});
+class RegisterScreens extends StatelessWidget {
+  const RegisterScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
-
+    final controller = Get.put(RegisterController());
+    // bool isPasswordVisible = false;
     return Scaffold(
         body: SafeArea(
       child: Column(
@@ -18,7 +18,7 @@ class LoginScreens extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 24, top: 80),
                 child: Text(
-                  "Sign In",
+                  "Sign Up",
                   style: TextStyle(
                       color: Color(0xFF0D1634),
                       fontSize: 40,
@@ -88,74 +88,69 @@ class LoginScreens extends StatelessWidget {
               ),
             )
           ]),
-          Row(
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(left: 24, top: 24),
-                  child: Text("PASSWORD",
-                      style: TextStyle(
-                        color: Color(0xFF808080),
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                      )))
-            ],
-          ),
-          Row(children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(top: 5, left: 24, right: 24),
-                child: SizedBox(
-                  height: 32,
-                  child: Obx(() {
-                    return TextField(
-                      obscureText: !controller.isPasswordVisible.value,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                      ),
-                      decoration: InputDecoration(
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                          color: Color(0xFF808080),
-                          width: 1,
-                        )),
-                        hintText: "Enter Your Password",
-                        hintStyle: TextStyle(
-                          color: Color(0xFF0D1634),
-                          fontSize: 14,
-                          fontFamily: 'Inter',
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Color(0xFF0064D2), width: 1),
-                        ),
-                        suffixIcon: Transform.translate(
-                            offset: Offset(0, -6),
-                            child: SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: IconButton(
-                                icon: Icon(
-                                  controller.isPasswordVisible.value
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Color(0xFF808080),
-                                ),
-                                onPressed: () {
-                                  controller.viewPassword();
-                                },
-                              ),
-                            )),
-                      ),
-                    );
-                  }),
-                ),
-              ),
-            )
-          ]),
+          // Row(
+          //   children: [
+          //     Padding(
+          //         padding: EdgeInsets.only(left: 24, top: 24),
+          //         child: Text("PASSWORD",
+          //             style: TextStyle(
+          //               color: Color(0xFF808080),
+          //               fontSize: 12,
+          //               fontFamily: 'Inter',
+          //             )))
+          //   ],
+          // ),
+          // Row(children: [
+          //   Expanded(
+          //     child: Padding(
+          //       padding: EdgeInsets.only(top: 5, left: 24, right: 24),
+          //       child: SizedBox(
+          //         height: 32,
+          //         child: TextField(
+          //           style: TextStyle(
+          //             fontSize: 14,
+          //             fontFamily: 'Inter',
+          //           ),
+          //           decoration: InputDecoration(
+          //             border: UnderlineInputBorder(
+          //                 borderSide: BorderSide(
+          //               color: Color(0xFF808080),
+          //               width: 1,
+          //             )),
+          //             hintText: "Enter Your Password",
+          //             hintStyle: TextStyle(
+          //               color: Color(0xFF0D1634),
+          //               fontSize: 14,
+          //               fontFamily: 'Inter',
+          //             ),
+          //             contentPadding: EdgeInsets.symmetric(
+          //               vertical: 10,
+          //             ),
+          //             focusedBorder: UnderlineInputBorder(
+          //               borderSide:
+          //                   BorderSide(color: Color(0xFF0064D2), width: 1),
+          //             ),
+          //             suffixIcon: Transform.translate(
+          //                 offset: Offset(0, -4),
+          //                 child: SizedBox(
+          //                   width: 24,
+          //                   height: 24,
+          //                   child: IconButton(
+          //                     icon: Icon(
+          //                       isPasswordVisible
+          //                           ? Icons.visibility
+          //                           : Icons.visibility_off,
+          //                       color: Color(0xFF808080),
+          //                     ),
+          //                     onPressed: () {},
+          //                   ),
+          //                 )),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   )
+          // ]),
           Row(children: [
             Expanded(
                 child: Padding(
@@ -228,7 +223,7 @@ class LoginScreens extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don’t Have an Account?",
+                    "Already have an account?",
                     style: TextStyle(
                       color: Color(0xB2252831),
                       fontSize: 14,
@@ -237,10 +232,10 @@ class LoginScreens extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      controller.navRegister();
+                      controller.navLogin();
                     },
                     child: Text(
-                      "Sign Up",
+                      "Sign In",
                       style: TextStyle(
                         color: Color(0xFF0064D2),
                         fontSize: 14,

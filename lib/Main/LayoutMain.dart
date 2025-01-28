@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kiwi_admin/Main/Home/HomeScreens.dart';
+import 'package:kiwi_admin/Main/Profile/ProfileScreens.dart';
 
 class LayoutMainScreens extends StatelessWidget {
   const LayoutMainScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -21,8 +22,8 @@ class LayoutMainScreens extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            Icon(Icons.directions_car),
-            Icon(Icons.directions_transit),
+            HomeScreens(),
+            ProfileScreens(),
             Icon(Icons.directions_bike),
           ],
         ),
