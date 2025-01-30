@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kiwi_admin/Clinic/ClinicScreens.dart';
 import 'package:kiwi_admin/Onboarding/OnboardingScreens.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue, // Chủ đề chính
       ),
-      home: OnboardingScreens(),
+      home: ClinicScreens(),
     );
   }
 }
