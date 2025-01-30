@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:kiwi_admin/Login/LoginScreens.dart';
+import 'package:kiwi_admin/Main/LayoutMain.dart';
 
 class OnboardingController extends GetxController {
   static OnboardingController get instance => Get.find();
   final pageController = PageController();
   final textPageController = PageController();
   Rx<int> currentPageIndex = 0.obs;
-  Rx<String> textLogin = "Next".obs;
+  Rx<String> textLogin = "Tiếp".obs;
   RxList<dynamic> itemsOnboarding = <dynamic>[
     {
       "id": 1,
@@ -35,10 +35,10 @@ class OnboardingController extends GetxController {
     int count = itemsOnboarding.value.length;
 
     if (currentPageIndex.value == (count - 2)) {
-      textLogin.value = "Login";
+      textLogin.value = "Trang chủ";
     }
     if (currentPageIndex.value >= (count - 1)) {
-      Get.off(() => LoginScreens());
+      Get.off(() => LayoutMainScreens());
       return;
     }
 
@@ -56,7 +56,7 @@ class OnboardingController extends GetxController {
   }
 
   void skipToMain() {
-    Get.off(() => LoginScreens());
+    Get.off(() => LayoutMainScreens());
     return;
   }
 }

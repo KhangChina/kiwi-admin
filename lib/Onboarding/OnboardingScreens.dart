@@ -48,7 +48,7 @@ class OnboardingScreens extends StatelessWidget {
                   minimumSize: Size(double.infinity, 48),
                 ),
                 child: Text(
-                  "Skip",
+                  "Bỏ qua",
                   style: TextStyle(
                     color: Color(0xFF252831),
                     fontSize: 16,

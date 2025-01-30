@@ -18,7 +18,7 @@ class RegisterScreens extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 24, top: 80),
                 child: Text(
-                  "Sign Up",
+                  "Đăng kí",
                   style: TextStyle(
                       color: Color(0xFF0D1634),
                       fontSize: 40,
