@@ -160,7 +160,7 @@ class productGroupPerfect extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  // controller.nav_to_products_detail();
+                 controller.navToCreateClinic();
                 },
                 borderRadius: BorderRadius.circular(8.0),
                 child: Text("Đăng kí",

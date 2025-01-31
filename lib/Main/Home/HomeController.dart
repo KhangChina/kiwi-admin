@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:kiwi_admin/Clinic/ClinicScreens.dart';
 
 class HomeController extends GetxController {
   static HomeController get instance => Get.find();
@@ -40,5 +41,9 @@ class HomeController extends GetxController {
 
   void updateCurrentPageChanged(index) {
     currentPageIndex.value = index;
+  }
+  void navToCreateClinic()
+  {
+    Get.to(() => ClinicScreens());
   }
 }

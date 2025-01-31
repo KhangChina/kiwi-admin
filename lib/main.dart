@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue, // Chủ đề chính
       ),
-      home: ClinicScreens(),
+      home: OnboardingScreens(),
     );
   }
 }

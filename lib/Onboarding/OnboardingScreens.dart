@@ -104,7 +104,7 @@ class OnboardingImages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final controller = Get.put(OnboardingController());
+    final controller = OnboardingController.instance;
     return Padding(
       padding: EdgeInsets.only(left: 16, right: 16, top: 23),
       child: Center(
@@ -129,7 +129,7 @@ class OnboardingTexts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(OnboardingController());
+     final controller = OnboardingController.instance;
     return Padding(
       padding: EdgeInsets.only(left: 16, right: 16, top: 24),
       child: SizedBox(

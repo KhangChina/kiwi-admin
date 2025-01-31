@@ -105,4 +105,9 @@ print(status.isGranted);
       imageFile.value = File(pickedFile.path);
     }
   }
+
+  void navGetBack()
+  {
+    Get.back();
+  }
 }

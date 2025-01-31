@@ -12,133 +12,141 @@ class ClinicScreens extends StatelessWidget {
     final controller = Get.put(ClinicController());
 
     return Scaffold(
-        backgroundColor: Color(0xFF0064D2),
-        body: SingleChildScrollView(
-            child: SafeArea(
-                child: Column(children: [
-          navViewMiniapp(),
-          clinicViewMiniApp(),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25)),
-                child: ColoredBox(
-                    color: Color(0xFFFFFFFF),
-                    child: SizedBox(
-                        width: screenWidth,
-                        height: screenHeight * 0.8,
-                        child: Padding(
-                          padding:
-                              EdgeInsets.only(left: 32, top: 32, right: 32),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Tên phòng khám",
-                                style: TextStyle(
-                                    color: Color(0xFF22313F),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 7),
-                              clinicNameInput(),
-                              SizedBox(height: 16),
-                              Text(
-                                "Số điện thoại liên hệ phòng khám",
-                                style: TextStyle(
-                                    color: Color(0xFF22313F),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 7),
-                              clinicPhoneInput(),
-                              SizedBox(height: 16),
-                              Text(
-                                "Chuyên khoa",
-                                style: TextStyle(
-                                    color: Color(0xFF22313F),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 7),
-                              multiDropdownSelect(),
-                              SizedBox(height: 16),
-                              Text(
-                                "Hình ảnh phòng khám",
-                                style: TextStyle(
-                                    color: Color(0xFF22313F),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 7),
-                              SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: InkWell(
-                                    onTap: () {
-                                      controller.pickImageFromGallery();
-                                    },
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(8)),
-                                          border: Border.all(
-                                              color: Color(0xFF808080))),
-                                      child: Obx(() {
-                                        return controller.imageFile.value !=
-                                                null
-                                            ? Image.file(
-                                                controller
-                                                    .imageFile.value!.absolute,
-                                                fit: BoxFit.cover)
-                                            : Center(
-                                                child: Icon(
-                                                  Icons.add_a_photo_outlined,
-                                                  size: 20,
-                                                  color: Color(0xFF0064D2),
-                                                ),
-                                              );
-                                      }),
-                                    ),
-                                  )),
-                              SizedBox(height: 24),
-                              ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFF0064D2),
-                                    elevation: 0,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                    ),
-                                    minimumSize: Size(double.infinity, 48),
+        body: DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+              Color(0xFF090979), // Màu giữa: #090979
+              Color(0xFF00D4FF), // Màu cuối: #00D4FF
+          ],
+        ),
+      ),
+      child: SingleChildScrollView(
+          child: SafeArea(
+              child: Column(children: [
+        navViewMiniapp(),
+        clinicViewMiniApp(),
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+              child: ColoredBox(
+                  color: Color(0xFFFFFFFF),
+                  child: SizedBox(
+                      width: screenWidth,
+                      height: screenHeight * 0.8,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 32, top: 32, right: 32),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Tên phòng khám",
+                              style: TextStyle(
+                                  color: Color(0xFF22313F),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 7),
+                            clinicNameInput(),
+                            SizedBox(height: 16),
+                            Text(
+                              "Số điện thoại liên hệ phòng khám",
+                              style: TextStyle(
+                                  color: Color(0xFF22313F),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 7),
+                            clinicPhoneInput(),
+                            SizedBox(height: 16),
+                            Text(
+                              "Chuyên khoa",
+                              style: TextStyle(
+                                  color: Color(0xFF22313F),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 7),
+                            multiDropdownSelect(),
+                            SizedBox(height: 16),
+                            Text(
+                              "Hình ảnh phòng khám",
+                              style: TextStyle(
+                                  color: Color(0xFF22313F),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 7),
+                            SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.pickImageFromGallery();
+                                  },
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8)),
+                                        border: Border.all(
+                                            color: Color(0xFF808080))),
+                                    child: Obx(() {
+                                      return controller.imageFile.value != null
+                                          ? Image.file(
+                                              controller
+                                                  .imageFile.value!.absolute,
+                                              fit: BoxFit.cover)
+                                          : Center(
+                                              child: Icon(
+                                                Icons.add_a_photo_outlined,
+                                                size: 20,
+                                                color: Color(0xFF0064D2),
+                                              ),
+                                            );
+                                    }),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Tạo",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontFamily: 'Inter',
-                                        ),
+                                )),
+                            SizedBox(height: 24),
+                            ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFF0064D2),
+                                  elevation: 0,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                  minimumSize: Size(double.infinity, 48),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Tạo",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontFamily: 'Inter',
                                       ),
-                                      SizedBox(width: 8),
-                                      Image(
-                                          image: AssetImage(
-                                              'assets/images/arrow_circle_right.png'),
-                                          height: 20,
-                                          width: 20)
-                                    ],
-                                  ))
-                            ],
-                          ),
-                        )))),
-          )
-        ]))));
+                                    ),
+                                    SizedBox(width: 8),
+                                    Image(
+                                        image: AssetImage(
+                                            'assets/images/arrow_circle_right.png'),
+                                        height: 20,
+                                        width: 20)
+                                  ],
+                                ))
+                          ],
+                        ),
+                      )))),
+        )
+      ]))),
+    ));
   }
 }
 
@@ -254,12 +262,18 @@ class clinicViewMiniApp extends StatelessWidget {
 class navViewMiniapp extends StatelessWidget {
   const navViewMiniapp({super.key});
   Widget build(BuildContext context) {
+    final controller = ClinicController.instance;
     return Row(
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 16, top: 12, bottom: 12),
-          child: Icon(Icons.chevron_left, color: Color(0xFFFFFFFF), size: 24),
-        ),
+            padding: EdgeInsets.only(left: 16, top: 12, bottom: 12),
+            child: InkWell(
+              onTap: () {
+                controller.navGetBack();
+              },
+              child:
+                  Icon(Icons.chevron_left, color: Color(0xFFFFFFFF), size: 24),
+            )),
         Expanded(
             child: Center(
           child: Text(
