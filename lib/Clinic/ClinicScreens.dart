@@ -9,8 +9,8 @@ class ClinicScreens extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
     final controller = Get.put(ClinicController());
+
     return Scaffold(
         backgroundColor: Color(0xFF0064D2),
         body: SingleChildScrollView(
@@ -53,7 +53,7 @@ class ClinicScreens extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 7),
-                              clinicNameInput(),
+                              clinicPhoneInput(),
                               SizedBox(height: 16),
                               Text(
                                 "Chuyên khoa",
@@ -73,7 +73,36 @@ class ClinicScreens extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                               SizedBox(height: 7),
-                              clinicNameInput(),
+                              SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: InkWell(
+                                    onTap: () {
+                                      controller.pickImageFromGallery();
+                                    },
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                          border: Border.all(
+                                              color: Color(0xFF808080))),
+                                      child: Obx(() {
+                                        return controller.imageFile.value !=
+                                                null
+                                            ? Image.file(
+                                                controller
+                                                    .imageFile.value!.absolute,
+                                                fit: BoxFit.cover)
+                                            : Center(
+                                                child: Icon(
+                                                  Icons.add_a_photo_outlined,
+                                                  size: 20,
+                                                  color: Color(0xFF0064D2),
+                                                ),
+                                              );
+                                      }),
+                                    ),
+                                  )),
                               SizedBox(height: 24),
                               ElevatedButton(
                                   onPressed: () {},
@@ -257,7 +286,7 @@ class multiDropdownSelect extends StatelessWidget {
       controller: controller.multiSelectController,
       items: controller.itemsProducts.value,
       onSelectionChange: (selectedItems) {
-        debugPrint("OnSelectionChange: $selectedItems");
+        // debugPrint("OnSelectionChange: $selectedItems");
       },
       fieldDecoration: FieldDecoration(
         hintText: 'Chọn chuyên khoa',
@@ -295,7 +324,48 @@ class multiDropdownSelect extends StatelessWidget {
       dropdownItemDecoration: DropdownItemDecoration(
         selectedIcon: const Icon(Icons.check_box, color: Color(0xFF0064D2)),
         disabledIcon: Icon(Icons.lock, color: Colors.grey.shade300),
-        
+      ),
+    );
+  }
+}
+
+class clinicPhoneInput extends StatelessWidget {
+  const clinicPhoneInput({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      keyboardType: TextInputType.phone,
+      style: TextStyle(
+        fontSize: 14,
+        fontFamily: 'Inter',
+      ),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: Color(0xFF808080),
+              width: 1,
+            )),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF0064D2), width: 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        prefixIcon: Transform.translate(
+            offset: Offset(0, 0),
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: IconButton(
+                icon: Icon(
+                  Icons.phone,
+                  color: Color(0xFF0064D2),
+                ),
+                onPressed: () {},
+              ),
+            )),
       ),
     );
   }
