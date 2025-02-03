@@ -5,6 +5,7 @@ import 'package:kiwi_admin/Main/Profile/ProfileScreens.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kiwi_admin/Main/TabController.dart';
+import 'package:kiwi_admin/Main/Transaction/TransactionScreens.dart';
 
 class LayoutMainScreens extends StatelessWidget {
   const LayoutMainScreens({super.key});
@@ -26,7 +27,7 @@ class LayoutMainScreens extends StatelessWidget {
           case 0:
             return HomeScreens();
           case 1:
-            return Center(child: Text("Transaction Screen"));
+            return TransactionScreens();
           case 2:
             return Center(child: Text("History Screen"));
           case 3:
