@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kiwi_admin/Main/History/Status/AllScreeens.dart';
+import 'package:kiwi_admin/Main/History/Status/CancelScreens.dart';
+import 'package:kiwi_admin/Main/History/Status/CompleteScreens.dart';
 
 class HistoryScreens extends StatelessWidget {
   const HistoryScreens({super.key});
@@ -51,9 +54,9 @@ class HistoryScreens extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
+              AllHistoryScreens(),
+              CancelHistoryScreens(),
+             CompleteHistoryScreens(),
             ],
           ),
         ),
