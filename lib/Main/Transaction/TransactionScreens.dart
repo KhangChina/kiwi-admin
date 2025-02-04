@@ -1,7 +1,9 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:kiwi_admin/Main/Transaction/TransactionController.dart';
 import 'package:lottie/lottie.dart';
 
 class TransactionScreens extends StatelessWidget {
@@ -9,11 +11,7 @@ class TransactionScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    List<DateTime?> _dialogCalendarPickerValue = [
-      DateTime.now(),
-      DateTime.now().add(const Duration(days: 5)),
-    ];
+    final controller = Get.put(TransactionController());
     return Scaffold(
         body: SafeArea(
             child: Column(
@@ -24,21 +22,27 @@ class TransactionScreens extends StatelessWidget {
               child: Padding(
                   padding: EdgeInsets.only(left: 20, right: 20, top: 10),
                   child: InkWell(
-                      onTap: () async {
-                        var results = await showCalendarDatePicker2Dialog(
-                          context: context,
-                          config: CalendarDatePicker2WithActionButtonsConfig(
-                            calendarType: CalendarDatePicker2Type.range,
-                            selectedRangeHighlightColor: Color(0xFFD0D0D0),
-                            selectedDayHighlightColor: Color(0xFF0064D2)
-                          ),
-                          dialogSize: const Size(325, 400),
-                          value: _dialogCalendarPickerValue,
-                          borderRadius: BorderRadius.circular(15),
-                        );
-                        print(results);
-                      },
-                      child: Text("Show"))),
+                    onTap: () async {
+                      await controller.showDialogSelectDate(context);
+                    },
+                    child: Obx(() {
+                      return Text(
+                        "Đang lọc theo: " +
+                            "Từ " +
+                            controller.formatDate(
+                                controller.dialogCalendarPickerValue.value[0]) +
+                            " đến " +
+                            controller.formatDate(
+                                controller.dialogCalendarPickerValue.value[1]),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontStyle: FontStyle.italic,
+                          decoration: TextDecoration.underline,
+                        ),
+                      );
+                    }),
+                  )),
             ),
           ],
         ),
@@ -119,7 +123,7 @@ class ItemTransaction extends StatelessWidget {
                               onTap: () {},
                               child: Icon(
                                 Icons.call,
-                                color: Color(0xFFD0D0D0),
+                                color: Color(0xFF733DF2),
                                 size: 20,
                               )),
                           Expanded(
@@ -137,7 +141,7 @@ class ItemTransaction extends StatelessWidget {
                             onTap: () {},
                             child: Icon(
                               Icons.cancel,
-                              color: Color(0xFFD0D0D0),
+                              color: Color(0xFFE64B4B),
                               size: 20,
                             ),
                           ),

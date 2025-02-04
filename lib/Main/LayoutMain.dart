@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kiwi_admin/Main/History/HistoryScreens.dart';
 import 'package:kiwi_admin/Main/Home/HomeScreens.dart';
 import 'package:kiwi_admin/Main/Profile/ProfileScreens.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
@@ -19,7 +20,7 @@ class LayoutMainScreens extends StatelessWidget {
       Icons.history,
       Icons.account_circle,
     ];
-    final iconName = ["Home", "Transaction", "History", "Profile"];
+    final iconName = ["Trang chủ", "Sắp đến", "Lịch sử", "Bạn"];
     return Scaffold(
       body: Obx(() {
         // Hiển thị màn hình tương ứng với tab được chọn
@@ -29,7 +30,7 @@ class LayoutMainScreens extends StatelessWidget {
           case 1:
             return TransactionScreens();
           case 2:
-            return Center(child: Text("History Screen"));
+            return HistoryScreens();
           case 3:
             return ProfileScreens();
           default:
