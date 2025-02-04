@@ -66,13 +66,15 @@ class TicketBorderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double radius = 16;
     double cutRadius = 15;
-    double cutPosition = size.height * 0.66; // Vị trí khuyết (có thể thay đổi)
+    double cutPosition = size.height * 0.66; // Vị trí khuyết
 
-    Paint paint = Paint()
+    // Vẽ đường viền
+    Paint borderPaint = Paint()
       ..color = Color(0xFFD0D0D0)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
+      ..strokeWidth = 1.5;
 
+    // Tạo path với phần khuyết
     Path path = Path();
     path.moveTo(radius, 0);
     path.lineTo(size.width - radius, 0);
@@ -90,14 +92,23 @@ class TicketBorderPainter extends CustomPainter {
         radius: Radius.circular(cutRadius), clockwise: false);
     path.lineTo(0, radius);
     path.quadraticBezierTo(0, 0, radius, 0);
-
     path.close();
-    canvas.drawPath(path, paint);
+
+    // Cắt nền theo đường path (để nền không đè lên phần khuyết)
+    canvas.clipPath(path);
+
+    // Vẽ nền trắng
+    Paint backgroundPaint = Paint()..color = Color(0xFFFFFFFF);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
+
+    // Vẽ đường viền
+    canvas.drawPath(path, borderPaint);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
+
 
 class ItemTransaction extends StatelessWidget {
   const ItemTransaction({super.key});
@@ -109,9 +120,16 @@ class ItemTransaction extends StatelessWidget {
       child: SizedBox(
           width: 305,
           height: 192,
-          child: CustomPaint(
+          child: 
+          
+          
+          CustomPaint(
               painter: TicketBorderPainter(),
-              child: Column(
+              child: 
+              
+              
+              
+              Column(
                 children: [
                   Padding(
                       padding:
@@ -307,7 +325,9 @@ class ItemTransaction extends StatelessWidget {
                     ),
                   ])
                 ],
-              ))),
+              ))
+              
+              ),
     );
   }
 }

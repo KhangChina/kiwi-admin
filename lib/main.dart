@@ -14,7 +14,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false, // Tắt banner debug
-      title: 'Onboarding App',
+      title: 'Kiwi Admin',
       theme: ThemeData(
         primarySwatch: Colors.blue, // Chủ đề chính
       ),

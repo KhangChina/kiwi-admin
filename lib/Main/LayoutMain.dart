@@ -58,6 +58,7 @@ class LayoutMainScreens extends StatelessWidget {
             );
           })),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      
       bottomNavigationBar: Obx(() {
         return AnimatedBottomNavigationBar.builder(
             backgroundColor: Color(0xFFFFFFFF),
@@ -65,6 +66,8 @@ class LayoutMainScreens extends StatelessWidget {
             onTap: (index) {
               controller.setStateActive(index);
             },
+            splashColor: Color(0xFF0064D2),
+            scaleFactor :0.5,
             gapLocation: GapLocation.center,
             leftCornerRadius: 32,
             rightCornerRadius: 32,

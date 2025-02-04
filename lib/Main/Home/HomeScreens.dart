@@ -17,7 +17,7 @@ class HomeScreens extends StatelessWidget {
           children: [
             SizedBox(
                 height: 214, // Đặt chiều cao cố định cho PageView
-                child: PageView(
+                child: PageView(                
                     controller: controller.pageController,
                     onPageChanged: controller.updateCurrentPageChanged,
                     children: [
