@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:kiwi_admin/Main/Profile/ProfileController.dart';
 
 class ProfileScreens extends StatelessWidget {
   const ProfileScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
+       final controller = Get.put(ProfileController());
     return Scaffold(
         body: SingleChildScrollView(
             child: Column(
@@ -47,7 +50,11 @@ class ProfileScreens extends StatelessWidget {
                     color: Color(0xFFCDD4D3),
                   ),
                   SizedBox(height: 16),
-                  Row(
+                  InkWell(
+                    onTap: () {
+                      controller.logout();
+                    },
+                    child: Row(
                     children: [
                       Icon(
                         Icons.logout,
@@ -67,6 +74,8 @@ class ProfileScreens extends StatelessWidget {
                       ),
                     ],
                   ),
+                  ),
+                  
                   SizedBox(height: 25),
               
                 ])))

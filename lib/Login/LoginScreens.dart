@@ -8,7 +8,8 @@ class LoginScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
-
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     return Scaffold(
         body: SafeArea(
       child: Column(
@@ -18,7 +19,7 @@ class LoginScreens extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 24, top: 80),
                 child: Text(
-                  "Sign In",
+                  "Đăng Nhập",
                   style: TextStyle(
                       color: Color(0xFF0D1634),
                       fontSize: 40,
@@ -32,7 +33,7 @@ class LoginScreens extends StatelessWidget {
             children: [
               Padding(
                   padding: EdgeInsets.only(left: 24, top: 16),
-                  child: Text('Start Your Journey with affordable price',
+                  child: Text('Tài khoản được cung cấp bởi Vinantech.com',
                       style: TextStyle(
                           color: Color(0xFF808080),
                           fontSize: 14,
@@ -59,6 +60,7 @@ class LoginScreens extends StatelessWidget {
                 child: SizedBox(
                   height: 32,
                   child: TextField(
+                    controller: usernameController,
                     style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Inter',
@@ -69,7 +71,7 @@ class LoginScreens extends StatelessWidget {
                         color: Color(0xFF808080),
                         width: 1,
                       )),
-                      hintText: "Email Address",
+                      hintText: "Địa chỉ mail hoặc số điện thoại",
                       hintStyle: TextStyle(
                         color: Color(0xFF0D1634),
                         fontSize: 14,
@@ -108,6 +110,7 @@ class LoginScreens extends StatelessWidget {
                   height: 32,
                   child: Obx(() {
                     return TextField(
+                      controller: passwordController,
                       obscureText: !controller.isPasswordVisible.value,
                       style: TextStyle(
                         fontSize: 14,
@@ -119,7 +122,7 @@ class LoginScreens extends StatelessWidget {
                           color: Color(0xFF808080),
                           width: 1,
                         )),
-                        hintText: "Enter Your Password",
+                        hintText: "Mật khẩu",
                         hintStyle: TextStyle(
                           color: Color(0xFF0D1634),
                           fontSize: 14,
@@ -161,8 +164,9 @@ class LoginScreens extends StatelessWidget {
                 child: Padding(
               padding: EdgeInsets.only(top: 24, left: 24, right: 24),
               child: ElevatedButton(
-                onPressed: () {
-                  controller.navHome();
+                onPressed: () async {
+                  await controller.login(usernameController.text, passwordController.text);
+                  // controller.navHome();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF0064D2),
@@ -175,7 +179,7 @@ class LoginScreens extends StatelessWidget {
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
-                    "Sign in",
+                    "Đăng nhập",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -196,7 +200,7 @@ class LoginScreens extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 24, left: 24, right: 24),
-                child: Text("Or Sign In With",
+                child: Text("Hoặc có thể đăng nhập bằng",
                     style: TextStyle(
                       color: Color(0xB2252831),
                       fontSize: 14,
@@ -228,7 +232,7 @@ class LoginScreens extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don’t Have an Account?",
+                    "Bạn chưa có tài khoản? ",
                     style: TextStyle(
                       color: Color(0xB2252831),
                       fontSize: 14,
@@ -240,7 +244,7 @@ class LoginScreens extends StatelessWidget {
                       controller.navRegister();
                     },
                     child: Text(
-                      "Sign Up",
+                      "Đăng kí ngay",
                       style: TextStyle(
                         color: Color(0xFF0064D2),
                         fontSize: 14,
