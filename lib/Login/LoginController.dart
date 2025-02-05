@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kiwi_admin/Main/LayoutMain.dart';
 import 'package:kiwi_admin/Register/RegisterScreens.dart';
+import 'package:kiwi_admin/Utility/Config.dart';
 import 'package:kiwi_admin/Utility/Utility.dart';
 
 class LoginController extends GetxController {
@@ -34,7 +35,7 @@ class LoginController extends GetxController {
     try {
       utility_controller.showLoadingDialog();
       var response = await dio.request(
-        'https://appointment.vinantech.com/wp-json/jwt-auth/v1/token',
+        Config.API_BASE_URL+'/jwt-auth/v1/token',
         options: Options(
           method: 'POST',
           headers: headers,
