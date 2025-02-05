@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -13,13 +15,15 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-     getClinic(); // Kiểm tra token khi controller khởi tạo
+    startAutoScroll();
+    getClinic(); // Kiểm tra token khi controller khởi tạo
   }
+
   RxBool isLoading = false.obs;
   RxList<dynamic> itemsProducts = <dynamic>[
     {
       "image": "assets/images/onboarding_images.png",
-      "name": "Item 1",
+      "name": "Bs Nguyễn Văn",
       "price": "100.0",
       "description": "Description for Item 1",
       "category": "Category 1",
@@ -62,7 +66,7 @@ class HomeController extends GetxController {
           headers: headers,
         ),
       );
-       isLoading.value = false;
+      isLoading.value = false;
       if (response.statusCode == 200) {
         var responseData = response.data;
         var data = responseData['data'];
@@ -86,4 +90,21 @@ class HomeController extends GetxController {
   void navToCreateClinic() {
     Get.to(() => ClinicScreens());
   }
+
+  Timer? _timer;
+  void startAutoScroll() {
+    _timer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+      if (pageController.hasClients) {
+        int nextPage =
+            (currentPageIndex.value + 1) % 3; // Lặp lại khi hết trang
+        pageController.animateToPage(
+          nextPage,
+          duration: Duration(milliseconds: 500), // Hiệu ứng chuyển trang mượt
+          curve: Curves.easeInOut,
+        );
+        currentPageIndex.value = nextPage;
+      }
+    });
+  }
+
 }
