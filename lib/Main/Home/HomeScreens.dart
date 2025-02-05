@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwi_admin/Main/Home/HomeController.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeScreens extends StatelessWidget {
@@ -17,7 +18,7 @@ class HomeScreens extends StatelessWidget {
           children: [
             SizedBox(
                 height: 214, // Đặt chiều cao cố định cho PageView
-                child: PageView(                
+                child: PageView(
                     controller: controller.pageController,
                     onPageChanged: controller.updateCurrentPageChanged,
                     children: [
@@ -39,7 +40,7 @@ class HomeScreens extends StatelessWidget {
             ),
           ],
         ),
-        productGroupPerfect(),
+        productGroupClinic(),
         productGroupSummer(),
       ]))),
     );
@@ -71,8 +72,9 @@ class NavigateItemHome extends StatelessWidget {
   }
 }
 
-class ItemProduct extends StatelessWidget {
-  const ItemProduct({super.key, this.item});
+class ItemClinic extends StatelessWidget {
+  const ItemClinic({super.key, this.item});
+
   final dynamic item;
   @override
   Widget build(Object context) {
@@ -91,12 +93,11 @@ class ItemProduct extends StatelessWidget {
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
                     ),
-                    child: Image.asset("assets/images/onboarding_images.png",
-                        fit: BoxFit.cover)),
+                    child: Image.network(item["url_image"], fit: BoxFit.cover)),
               ),
               SizedBox(
                 width: 200,
-                height: 69,
+                height: 50,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                       color: Color(0xFFF7F8FD),
@@ -105,42 +106,47 @@ class ItemProduct extends StatelessWidget {
                         bottomRight: Radius.circular(16),
                       ) // Màu nền cho Row
                       ),
-                  child: Column(children: [
-                    Row(
-                      children: [
+                  child:  Column(children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 16, top: 16),
-                          child: Text(
-                            item["name"],
-                            style: TextStyle(
-                                color: Color(0xFF1F2024), fontSize: 12),
+                          padding: EdgeInsets.only(left: 5, top: 5),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  item["name"],
+                                  style: TextStyle(
+                                      color: Color(0xFF1F2024),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 16),
-                          child: Text(item["price"],
-                              style: TextStyle(
-                                  color: Color(0xFF1F2024),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left),
-                        ),
-                      ],
-                    ),
-                  ]), // Tên,
+                        //Expanded(child: Row()),
+                        // Row(
+                        //   children: [
+                        //     Padding(
+                        //       padding: EdgeInsets.only(left: 5, bottom: 5),
+                        //       child: Text(item["address"],
+                        //           style: TextStyle(
+                        //               color: Color(0xFF1F2024),
+                        //               fontSize: 12,
+                        //               fontWeight: FontWeight.normal),
+                        //           textAlign: TextAlign.left),
+                        //     ),
+                        //   ],
+                        // ),
+                      ])), // Tên,
                 ),
-              )
+              
             ],
           ),
         ));
   }
 }
 
-class productGroupPerfect extends StatelessWidget {
+class productGroupClinic extends StatelessWidget {
   @override
   Widget build(Object context) {
     final controller = HomeController.instance;
@@ -160,7 +166,7 @@ class productGroupPerfect extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                 controller.navToCreateClinic();
+                  controller.navToCreateClinic();
                 },
                 borderRadius: BorderRadius.circular(8.0),
                 child: Text("Đăng kí",
@@ -175,19 +181,37 @@ class productGroupPerfect extends StatelessWidget {
       Padding(
         padding: EdgeInsets.only(top: 16),
         child: SizedBox(
-            height: 189,
-            child: Obx(() {
+          height: 189,
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              // Hiển thị danh sách loading skeleton khi đang tải dữ liệu
               return ListView.builder(
                 padding: EdgeInsets.only(left: 16),
                 scrollDirection: Axis.horizontal,
-                itemCount: controller
-                    .itemsProducts.length, // Số lượng phần tử trong danh sách
+                itemCount: 3, // Số lượng skeleton hiển thị
                 itemBuilder: (context, index) {
-                  final item = controller.itemsProducts[index];
-                  return ItemProduct(item: item);
+                  return ItemClinicSkeleton(); // Hiển thị UI skeleton
                 },
               );
-            })),
+            }
+
+            // Nếu không có dữ liệu, hiển thị thông báo
+            if (controller.itemsClinic.isEmpty) {
+              return Center(child: Text("Không có phòng khám nào"));
+            }
+
+            // Hiển thị danh sách thực tế sau khi dữ liệu được tải
+            return ListView.builder(
+              padding: EdgeInsets.only(left: 16),
+              scrollDirection: Axis.horizontal,
+              itemCount: controller.itemsClinic.length,
+              itemBuilder: (context, index) {
+                final item = controller.itemsClinic[index];
+                return ItemClinic(item: item);
+              },
+            );
+          }),
+        ),
       ),
     ]);
   }
@@ -224,7 +248,7 @@ class productGroupSummer extends StatelessWidget {
   Widget build(Object context) {
     return Column(children: [
       Padding(
-          padding: EdgeInsets.only(top: 24, left: 16, right: 16),
+          padding: EdgeInsets.only(top: 20, left: 16, right: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -250,21 +274,42 @@ class productGroupSummer extends StatelessWidget {
               ),
             ],
           )),
-      Padding(
-        padding: EdgeInsets.only(top: 16),
-        child: SizedBox(
-          height: 189,
-          child: ListView.builder(
-            padding: EdgeInsets.only(left: 16),
-            scrollDirection: Axis.horizontal,
-            itemCount: items.length, // Số lượng phần tử trong danh sách
-            itemBuilder: (context, index) {
-              var item = items[index];
-              return ItemProduct(item: item);
-            },
+      // Padding(
+      //   padding: EdgeInsets.only(top: 16),
+      //   child: SizedBox(
+      //     height: 189,
+      //     child: ListView.builder(
+      //       padding: EdgeInsets.only(left: 16),
+      //       scrollDirection: Axis.horizontal,
+      //       itemCount: items.length, // Số lượng phần tử trong danh sách
+      //       itemBuilder: (context, index) {
+      //         var item = items[index];
+      //         return ItemProduct(item: item);
+      //       },
+      //     ),
+      //   ),
+      // ),
+    ]);
+  }
+}
+
+class ItemClinicSkeleton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 16),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          width: 200,
+          height: 180,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
       ),
-    ]);
+    );
   }
 }
