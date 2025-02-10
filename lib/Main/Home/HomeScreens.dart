@@ -198,48 +198,6 @@ class productGroupClinic extends StatelessWidget {
 }
 
 class productGroupDoctor extends StatelessWidget {
-  List<dynamic> items = [
-    {
-      "image": "assets/images/onboarding_images.png", // Đường dẫn tới hình ảnh
-      "name": "Bs Nguyễn văn ABC",
-      "price": "100.0",
-      "description": "Description for Item 1",
-      "category": "Category 1",
-      // Thêm các trường khác nếu cần
-    },
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Item 2",
-      "price": "200.0",
-      "description": "Description for Item 2",
-      "category": "Category 2",
-      // Thêm các trường khác nếu cần
-    },
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Item 3",
-      "price": "300.0",
-      "description": "Description for Item 3",
-      "category": "Category 3",
-      // Thêm các trường khác nếu cần
-    },
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Item 3",
-      "price": "300.0",
-      "description": "Description for Item 3",
-      "category": "Category 3",
-      // Thêm các trường khác nếu cần
-    },
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Item 3",
-      "price": "300.0",
-      "description": "Description for Item 3",
-      "category": "Category 3",
-      // Thêm các trường khác nếu cần
-    }
-  ];
   @override
   Widget build(Object context) {
     final controller = HomeController.instance;
@@ -262,7 +220,7 @@ class productGroupDoctor extends StatelessWidget {
                   print("Notification image clicked");
                 },
                 borderRadius: BorderRadius.circular(8.0),
-                child: Text("Đăng kí",
+                child: Text("Xem thông tin",
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -348,7 +306,7 @@ class ItemDoctor extends StatelessWidget {
                   Padding(
                       padding: EdgeInsets.only(right: 6),
                       child: Icon(
-                        Icons.add_call,
+                        Icons.saved_search,
                         size: 20,
                         color: Color(0xFF006FFD),
                       ))
