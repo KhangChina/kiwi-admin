@@ -118,20 +118,6 @@ class ItemClinic extends StatelessWidget {
                           ],
                         ),
                       ),
-                      //Expanded(child: Row()),
-                      // Row(
-                      //   children: [
-                      //     Padding(
-                      //       padding: EdgeInsets.only(left: 5, bottom: 5),
-                      //       child: Text(item["address"],
-                      //           style: TextStyle(
-                      //               color: Color(0xFF1F2024),
-                      //               fontSize: 12,
-                      //               fontWeight: FontWeight.normal),
-                      //           textAlign: TextAlign.left),
-                      //     ),
-                      //   ],
-                      // ),
                     ])), // Tên,
               ),
             ],
@@ -256,6 +242,7 @@ class productGroupDoctor extends StatelessWidget {
   ];
   @override
   Widget build(Object context) {
+    final controller = HomeController.instance;
     return Column(children: [
       Padding(
           padding: EdgeInsets.only(top: 20, left: 16, right: 16),
@@ -292,9 +279,9 @@ class productGroupDoctor extends StatelessWidget {
           child: ListView.builder(
             padding: EdgeInsets.only(left: 16),
             scrollDirection: Axis.vertical,
-            itemCount: items.length, // Số lượng phần tử trong danh sách
+            itemCount: controller.itemDoctor.length, // Số lượng phần tử trong danh sách
             itemBuilder: (context, index) {
-              var item = items[index];
+               final item = controller.itemDoctor[index];
               return ItemDoctor(item: item);
             },
           ),
@@ -340,7 +327,7 @@ class ItemDoctor extends StatelessWidget {
             height: 60,
             child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(50)),
-                child: Image.asset(item["image"], fit: BoxFit.cover)),
+                child: Image.network(item["avatar"], fit: BoxFit.cover)),
           ),
           Expanded(
               child: Column(
@@ -351,7 +338,7 @@ class ItemDoctor extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 6),
                     child: Text(
-                      item["name"],
+                      item["display_name"],
                       style: TextStyle(
                           color: Color(0xFF1F2024),
                           fontSize: 14,
@@ -361,7 +348,7 @@ class ItemDoctor extends StatelessWidget {
                   Padding(
                       padding: EdgeInsets.only(right: 6),
                       child: Icon(
-                        Icons.edit,
+                        Icons.add_call,
                         size: 20,
                         color: Color(0xFF006FFD),
                       ))
@@ -372,7 +359,7 @@ class ItemDoctor extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 6),
                     child: Text(
-                      "0964440775",
+                       item["clinic_name"],
                       style: TextStyle(
                           color: Color(0xFFC5C6CC),
                           fontSize: 12,

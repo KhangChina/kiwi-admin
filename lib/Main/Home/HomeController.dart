@@ -16,10 +16,12 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     startAutoScroll();
-    getClinic(); // Kiểm tra token khi controller khởi tạo
+    getClinic(); 
+    getDoctor();// Kiểm tra token khi controller khởi tạo
   }
 
   RxBool isLoading = false.obs;
+  RxBool isLoadingDoctor = false.obs;
   RxList<dynamic> itemsProducts = <dynamic>[
     {
       "image": "assets/images/onboarding_images.png",
@@ -52,6 +54,7 @@ class HomeController extends GetxController {
   ].obs;
 
   RxList<dynamic> itemsClinic = <dynamic>[].obs;
+  RxList<dynamic> itemDoctor = <dynamic>[].obs;
   Future<void> getClinic() async {
     var headers = {
       'Content-Type': 'application/json',
@@ -107,4 +110,34 @@ class HomeController extends GetxController {
     });
   }
 
+  Future<void> getDoctor() async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    isLoadingDoctor.value = true;
+    var dio = Dio();
+    try {
+      var response = await dio.request(
+        Config.API_BASE_URL + '/mobile/v1/doctors',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      isLoadingDoctor.value = false;
+      if (response.statusCode == 200) {
+        var responseData = response.data;
+        var data = responseData['data'];
+        if (data != null) {
+          // itemsClinic.value = data;
+          itemDoctor.assignAll(data);
+        }
+      } else {
+        print(response.statusMessage);
+      }
+    } catch (e) {
+      print(e);
+      isLoadingDoctor.value = false;
+    }
+  }
 }
