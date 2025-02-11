@@ -1,33 +1,16 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:kiwi_admin/Login/LoginScreens.dart';
 class TransactionController extends GetxController {
   static TransactionController get instance => Get.find();
   @override
   void onInit() {
     super.onInit();
-    print("hello");
-    checkAuth(); // Kiểm tra token khi controller khởi tạo
+    //print("hello");
+    //checkAuth(); // Kiểm tra token khi controller khởi tạo
   }
 
-  var isAuthenticated = false.obs;
-  Future<void> checkAuth() async {
-    final box = GetStorage();
-   bool hasToken = box.hasData('auth_token');
-    if (!hasToken) {
-      isAuthenticated.value = false;
-     Future.delayed(Duration.zero, () {
-      if (Get.context != null) {
-        Get.to(() => LoginScreens()); 
-      }
-    }); // Điều hướng đến màn hình đăng nhập
-    } else {
-      isAuthenticated.value = true;
-    }
-  }
 
   RxList<DateTime> dialogCalendarPickerValue = [
     DateTime.now(),

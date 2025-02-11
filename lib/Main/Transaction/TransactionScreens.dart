@@ -2,7 +2,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kiwi_admin/Main/Transaction/TransactionController.dart';
-
+import 'package:kiwi_admin/Utility/Utility.dart';
 
 class TransactionScreens extends StatelessWidget {
   const TransactionScreens({super.key});
@@ -10,51 +10,60 @@ class TransactionScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(TransactionController());
+    final utility = UtilityController.instance;
     return Scaffold(
-        body: SafeArea(
-            child: Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: InkWell(
-                    onTap: () async {
-                      await controller.showDialogSelectDate(context);
-                    },
-                    child: Obx(() {
-                      return Text(
-                        "Đang lọc theo: " +
-                            "Từ " +
-                            controller.formatDate(
-                                controller.dialogCalendarPickerValue.value[0]) +
-                            " đến " +
-                            controller.formatDate(
-                                controller.dialogCalendarPickerValue.value[1]),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          fontStyle: FontStyle.italic,
-                          decoration: TextDecoration.underline,
-                        ),
-                      );
-                    }),
-                  )),
-            ),
-          ],
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(20),
-            itemCount: 100,
-            itemBuilder: (context, index) {
-              return ItemTransaction();
-            },
-          ),
-        )
-      ],
-    )));
+      body: SafeArea(
+        child: Obx(() {
+          if (utility.isAuthenticated.value) {
+            return Center(
+                child: CircularProgressIndicator()); // Hiển thị loading khi đang kiểm tra
+          }
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                        child: InkWell(
+                          onTap: () async {
+                            await controller.showDialogSelectDate(context);
+                          },
+                          child: Obx(() {
+                            return Text(
+                              "Đang lọc theo: " +
+                                  "Từ " +
+                                  controller.formatDate(controller
+                                      .dialogCalendarPickerValue.value[0]) +
+                                  " đến " +
+                                  controller.formatDate(controller
+                                      .dialogCalendarPickerValue.value[1]),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                fontStyle: FontStyle.italic,
+                                decoration: TextDecoration.underline,
+                              ),
+                            );
+                          }),
+                        )),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(20),
+                  itemCount: 100,
+                  itemBuilder: (context, index) {
+                    return ItemTransaction();
+                  },
+                ),
+              )
+            ],
+          );
+        }),
+      ),
+    );
   }
 }
 
@@ -97,7 +106,8 @@ class TicketBorderPainter extends CustomPainter {
 
     // Vẽ nền trắng
     Paint backgroundPaint = Paint()..color = Color(0xFFFFFFFF);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
+    canvas.drawRect(
+        Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
 
     // Vẽ đường viền
     canvas.drawPath(path, borderPaint);
@@ -106,7 +116,6 @@ class TicketBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
-
 
 class ItemTransaction extends StatelessWidget {
   const ItemTransaction({super.key});
@@ -118,16 +127,9 @@ class ItemTransaction extends StatelessWidget {
       child: SizedBox(
           width: 305,
           height: 192,
-          child: 
-          
-          
-          CustomPaint(
+          child: CustomPaint(
               painter: TicketBorderPainter(),
-              child: 
-              
-              
-              
-              Column(
+              child: Column(
                 children: [
                   Padding(
                       padding:
@@ -323,9 +325,7 @@ class ItemTransaction extends StatelessWidget {
                     ),
                   ])
                 ],
-              ))
-              
-              ),
+              ))),
     );
   }
 }

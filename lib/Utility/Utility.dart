@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:kiwi_admin/Login/LoginScreens.dart';
 import 'package:lottie/lottie.dart';
 
 class UtilityController extends GetxController {
@@ -64,5 +66,21 @@ class UtilityController extends GetxController {
       ),
       barrierDismissible: false,
     );
+  }
+
+   Rx<bool> isAuthenticated = true.obs;
+  Future<void> checkAuth() async {
+    final box = GetStorage();
+    bool hasToken = box.hasData('auth_token');
+    if (!hasToken) {
+      isAuthenticated.value = true;
+      Future.delayed(Duration.zero, () {
+        if (Get.context != null) {
+          Get.to(() => LoginScreens());
+        }
+      }); // Điều hướng đến màn hình đăng nhập
+    } else {
+      isAuthenticated.value = true;
+    }
   }
 }

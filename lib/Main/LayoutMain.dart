@@ -7,6 +7,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/rendering.dart';
 import 'package:kiwi_admin/Main/TabController.dart';
 import 'package:kiwi_admin/Main/Transaction/TransactionScreens.dart';
+import 'package:kiwi_admin/Utility/Utility.dart';
 
 class LayoutMainScreens extends StatelessWidget {
   const LayoutMainScreens({super.key});
@@ -14,6 +15,7 @@ class LayoutMainScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(TabsController());
+    final utility = UtilityController.instance;
     final iconList = [
       Icons.home,
       Icons.local_activity,
@@ -28,6 +30,7 @@ class LayoutMainScreens extends StatelessWidget {
             case 0:
               return HomeScreens();
             case 1:
+              utility.checkAuth();
               return TransactionScreens();
             case 2:
               return HistoryScreens();
@@ -105,13 +108,13 @@ class LayoutMainScreens extends StatelessWidget {
               right: 0,
               child: Center(
                 child: Obx(() {
-                   Color textColor = controller.bottomNavIndex.value == 5
-                  ? Color(0xFF0064D2) // Màu khi tab đầu tiên được chọn
-                  : Color(0xFF808080);
+                  Color textColor = controller.bottomNavIndex.value == 5
+                      ? Color(0xFF0064D2) // Màu khi tab đầu tiên được chọn
+                      : Color(0xFF808080);
                   return Text("Hỗ trợ",
                       style: TextStyle(
                         fontSize: 12,
-                        color:textColor,
+                        color: textColor,
                       ));
                 }),
               ))

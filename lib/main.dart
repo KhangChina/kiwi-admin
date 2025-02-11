@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:kiwi_admin/Clinic/ClinicScreens.dart';
 import 'package:kiwi_admin/Onboarding/OnboardingScreens.dart';
+import 'package:kiwi_admin/Utility/Utility.dart';
 
 Future<void> main() async {
-  await GetStorage.init(); 
+  await GetStorage.init();
+  Get.put(UtilityController());
   runApp(const MainApp());
 }
 
