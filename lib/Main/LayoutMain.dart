@@ -22,82 +22,99 @@ class LayoutMainScreens extends StatelessWidget {
     ];
     final iconName = ["Trang chủ", "Sắp đến", "Lịch sử", "Bạn"];
     return Scaffold(
-      body: Obx(() {
-        // Hiển thị màn hình tương ứng với tab được chọn
-        switch (controller.bottomNavIndex.value) {
-          case 0:
-            return HomeScreens();
-          case 1:
-            return TransactionScreens();
-          case 2:
-            return HistoryScreens();
-          case 3:
-            return ProfileScreens();
-          default:
-            return HomeScreens();
-        }
-      }),
-      floatingActionButton: Padding(
-          padding: EdgeInsets.all(4),
-          child: Obx(() {
-            Color iconColor = controller.bottomNavIndex.value == 5
-                ? Color(0xFF0064D2) // Màu khi tab đầu tiên được chọn
-                : Color(0xFF808080);
-            return FloatingActionButton(
-              onPressed: () {
-                controller.setSupportButtonActive();
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100), // Bán kính bo góc
-              ),
-              child: Icon(
-                Icons.support_agent,
-                size: 35,
-                color: iconColor,
-              ),
-            );
-          })),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      
-      bottomNavigationBar: Obx(() {
-        return AnimatedBottomNavigationBar.builder(
-            backgroundColor: Color(0xFFFFFFFF),
-            height: 79,
-            onTap: (index) {
-              controller.setStateActive(index);
-            },
-            splashColor: Color(0xFF0064D2),
-            scaleFactor :0.5,
-            gapLocation: GapLocation.center,
-            leftCornerRadius: 32,
-            rightCornerRadius: 32,
-            activeIndex: controller.bottomNavIndex.value,
-            itemCount: iconList.length,
-            tabBuilder: (int index, bool isActive) {
-              final color = isActive ? Color(0xFF0064D2) : Color(0xFF808080);
-              final textColor =
-                  isActive ? Color(0xFF0D1634) : Color(0xFF808080);
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    iconList[index],
-                    size: 24,
-                    color: color,
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    iconName[index],
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: 12,
-                    ),
-                  )
-                ],
+        body: Obx(() {
+          // Hiển thị màn hình tương ứng với tab được chọn
+          switch (controller.bottomNavIndex.value) {
+            case 0:
+              return HomeScreens();
+            case 1:
+              return TransactionScreens();
+            case 2:
+              return HistoryScreens();
+            case 3:
+              return ProfileScreens();
+            default:
+              return HomeScreens();
+          }
+        }),
+        floatingActionButton: Padding(
+            padding: EdgeInsets.all(4),
+            child: Obx(() {
+              Color iconColor = controller.bottomNavIndex.value == 5
+                  ? Color(0xFF0064D2) // Màu khi tab đầu tiên được chọn
+                  : Color(0xFF808080);
+              return FloatingActionButton(
+                onPressed: () {
+                  controller.setSupportButtonActive();
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100), // Bán kính bo góc
+                ),
+                child: Icon(
+                  Icons.support_agent,
+                  size: 35,
+                  color: iconColor,
+                ),
               );
-            });
-      }),
-    );
+            })),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: Stack(children: [
+          Obx(() {
+            return AnimatedBottomNavigationBar.builder(
+                backgroundColor: Color(0xFFFFFFFF),
+                height: 79,
+                onTap: (index) {
+                  controller.setStateActive(index);
+                },
+                splashColor: Color(0xFF0064D2),
+                scaleFactor: 0.5,
+                gapLocation: GapLocation.center,
+                leftCornerRadius: 32,
+                rightCornerRadius: 32,
+                activeIndex: controller.bottomNavIndex.value,
+                itemCount: iconList.length,
+                tabBuilder: (int index, bool isActive) {
+                  final color =
+                      isActive ? Color(0xFF0064D2) : Color(0xFF808080);
+                  final textColor =
+                      isActive ? Color(0xFF0D1634) : Color(0xFF808080);
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        iconList[index],
+                        size: 24,
+                        color: color,
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        iconName[index],
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 12,
+                        ),
+                      )
+                    ],
+                  );
+                });
+          }),
+          Positioned(
+              bottom: 17,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Obx(() {
+                   Color textColor = controller.bottomNavIndex.value == 5
+                  ? Color(0xFF0064D2) // Màu khi tab đầu tiên được chọn
+                  : Color(0xFF808080);
+                  return Text("Hỗ trợ",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color:textColor,
+                      ));
+                }),
+              ))
+        ]));
   }
 }

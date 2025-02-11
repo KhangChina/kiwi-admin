@@ -16,42 +16,18 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     startAutoScroll();
-    getClinic(); 
-    getDoctor();// Kiểm tra token khi controller khởi tạo
+    loadData(); // Kiểm tra token khi controller khởi tạo
+  }
+
+  Future<void> loadData() async {
+    await Future.wait([
+      getClinic(),
+      getDoctor(),
+    ]);
   }
 
   RxBool isLoading = false.obs;
   RxBool isLoadingDoctor = false.obs;
-  RxList<dynamic> itemsProducts = <dynamic>[
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Bs Nguyễn Văn",
-      "price": "100.0",
-      "description": "Description for Item 1",
-      "category": "Category 1",
-    },
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Item 2",
-      "price": "200.0",
-      "description": "Description for Item 2",
-      "category": "Category 2",
-    },
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Item 3",
-      "price": "300.0",
-      "description": "Description for Item 3",
-      "category": "Category 3",
-    },
-    {
-      "image": "assets/images/onboarding_images.png",
-      "name": "Item 4",
-      "price": "300.0",
-      "description": "Description for Item 4",
-      "category": "Category 3",
-    }
-  ].obs;
 
   RxList<dynamic> itemsClinic = <dynamic>[].obs;
   RxList<dynamic> itemDoctor = <dynamic>[].obs;

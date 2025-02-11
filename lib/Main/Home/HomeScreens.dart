@@ -232,18 +232,35 @@ class productGroupDoctor extends StatelessWidget {
       Padding(
         padding: EdgeInsets.only(top: 16),
         child: SizedBox(
-          height: 200, // Đặt chiều cao cố định cho ListView
-          width: double.infinity, // Chiếm hết chiều ngang có sẵn
-          child: ListView.builder(
-            padding: EdgeInsets.only(left: 16),
-            scrollDirection: Axis.vertical,
-            itemCount: controller.itemDoctor.length, // Số lượng phần tử trong danh sách
-            itemBuilder: (context, index) {
-               final item = controller.itemDoctor[index];
-              return ItemDoctor(item: item);
-            },
-          ),
-        ),
+            height: 200, // Đặt chiều cao cố định cho ListView
+            width: double.infinity, // Chiếm hết chiều ngang có sẵn
+            child: Obx(() {
+              if (controller.isLoadingDoctor.value) {
+                return ListView.builder(
+                  padding: EdgeInsets.only(left: 16),
+                  scrollDirection: Axis.vertical,
+                  itemCount: 3, // Số lượng phần tử trong danh sách
+                  itemBuilder: (context, index) {
+                    return ItemDoctorSkeleton();
+                  },
+                );
+              }
+
+              if (controller.itemDoctor.isEmpty) {
+                return Center(child: Text("Không có bác sĩ nào"));
+              }
+
+              return ListView.builder(
+                padding: EdgeInsets.only(left: 16),
+                scrollDirection: Axis.vertical,
+                itemCount: controller
+                    .itemDoctor.length, // Số lượng phần tử trong danh sách
+                itemBuilder: (context, index) {
+                  final item = controller.itemDoctor[index];
+                  return ItemDoctor(item: item);
+                },
+              );
+            })),
       )
     ]);
   }
@@ -317,12 +334,98 @@ class ItemDoctor extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 6),
                     child: Text(
-                       item["clinic_name"],
+                      item["clinic_name"],
                       style: TextStyle(
                           color: Color(0xFFC5C6CC),
                           fontSize: 12,
                           fontWeight: FontWeight.normal),
                     ),
+                  ),
+                ],
+              )
+            ],
+          ))
+
+          // Tên,
+        ],
+      ),
+    );
+  }
+}
+
+class ItemDoctorSkeleton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 8, bottom: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 60,
+            height: 60,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(50)),
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+              child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(left: 6),
+                      child: SizedBox(
+                        height: 14,
+                        width: 150,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      )),
+                  // Padding(
+                  //     padding: EdgeInsets.only(right: 6),
+                  //     child: Icon(
+                  //       Icons.saved_search,
+                  //       size: 20,
+                  //       color: Color(0xFF006FFD),
+                  //     ))
+                ],
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 6,top: 2),
+                    child: SizedBox(
+                        height: 12,
+                        width: 200,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
                   ),
                 ],
               )
