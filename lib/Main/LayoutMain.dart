@@ -33,8 +33,10 @@ class LayoutMainScreens extends StatelessWidget {
               utility.checkAuth();
               return TransactionScreens();
             case 2:
+              utility.checkAuth();
               return HistoryScreens();
             case 3:
+              utility.checkAuth();
               return ProfileScreens();
             default:
               return HomeScreens();

@@ -3,6 +3,8 @@
     <!-- Quyền cho Android 10 trở xuống -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
     <!-- Quyền camera -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <!-- Quyền cho Android 13 trở lên -->

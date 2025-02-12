@@ -1,7 +1,9 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:kiwi_admin/Utility/Config.dart';
 class TransactionController extends GetxController {
   static TransactionController get instance => Get.find();
   @override
@@ -36,5 +38,38 @@ class TransactionController extends GetxController {
 
   String formatDate(DateTime? date) {
     return date != null ? DateFormat('d/M/y').format(date) : 'N/A';
+  }
+  RxBool isLoading = false.obs;
+  RxList<dynamic> itemsTransaction = <dynamic>[].obs;
+  Future<void> get_data_transaction()
+  async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    isLoading.value = true;
+    var dio = Dio();
+    try {
+      var response = await dio.request(
+        Config.API_BASE_URL + '/wp-json/mobile/v1/appointment',
+        options: Options(
+          method: 'GET',
+          headers: headers,
+        ),
+      );
+      isLoading.value = false;
+      if (response.statusCode == 200) {
+        var responseData = response.data;
+        var data = responseData['data'];
+        if (data != null) {
+          // itemsClinic.value = data;
+          itemsTransaction.assignAll(data);
+        }
+      } else {
+        print(response.statusMessage);
+      }
+    } catch (e) {
+      print(e);
+      isLoading.value = false;
+    }
   }
 }

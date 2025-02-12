@@ -1,86 +1,113 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kiwi_admin/Main/Profile/ProfileController.dart';
+import 'package:kiwi_admin/Utility/Utility.dart';
+import 'package:lottie/lottie.dart';
 
 class ProfileScreens extends StatelessWidget {
   const ProfileScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
-       final controller = Get.put(ProfileController());
-    return Scaffold(
-        body: SingleChildScrollView(
+    final controller = Get.put(ProfileController());
+    final utility = UtilityController.instance;
+    final box = GetStorage();
+    bool hasToken = box.hasData('auth_token');
+    utility.isAuthenticated.value = !box.hasData('auth_token');
+    return Scaffold(body: SingleChildScrollView(child: Obx(() {
+      if (utility.isAuthenticated.value) {
+        return Center(
             child: Column(
-      children: [
-        ColoredBox(
-            color: Color(0xFFFFFFFF),
-            child: Column(children: [
-              ProfileInfo(),
-              ClinicInfo(),
-            ])),
-        SizedBox(height: 24),
-        ColoredBox(
-            color: Color(0xFFFFFFFF),
-            child: Padding(
-                padding: EdgeInsets.only(left: 24, right: 24, top: 24),
-                child: Column(children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.notifications,
-                        color: Color(0xFF0064D2),
-                        size: 24,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset('assets/gif/login.json',
+                fit: BoxFit.contain, width: 160),
+            InkWell(
+              onTap: () {
+                utility.checkAuth();
+              },
+              child: Text("Ấn để đăng nhập",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0D1634),
+                  )),
+            ),
+          ],
+        )); // Hiển thị loading khi đang kiểm tra
+      }
+
+      return Column(
+        children: [
+          ColoredBox(
+              color: Color(0xFFFFFFFF),
+              child: Column(children: [
+                ProfileInfo(),
+                ClinicInfo(),
+              ])),
+          SizedBox(height: 24),
+          ColoredBox(
+              color: Color(0xFFFFFFFF),
+              child: Padding(
+                  padding: EdgeInsets.only(left: 24, right: 24, top: 24),
+                  child: Column(children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.notifications,
+                          color: Color(0xFF0064D2),
+                          size: 24,
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                            child: Text(
+                          "Thông báo",
+                          style: TextStyle(fontSize: 16),
+                        )),
+                        Icon(
+                          Icons.navigate_next,
+                          color: Color(0xFFCDD4D3),
+                          size: 24,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25),
+                    Divider(
+                      height: 0.5,
+                      color: Color(0xFFCDD4D3),
+                    ),
+                    SizedBox(height: 16),
+                    InkWell(
+                      onTap: () {
+                        controller.logout();
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: Color(0xFF0064D2),
+                            size: 24,
+                          ),
+                          SizedBox(width: 16),
+                          Expanded(
+                              child: Text(
+                            "Đăng xuất",
+                            style: TextStyle(fontSize: 16),
+                          )),
+                          Icon(
+                            Icons.navigate_next,
+                            color: Color(0xFFCDD4D3),
+                            size: 24,
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 16),
-                      Expanded(
-                          child: Text(
-                        "Thông báo",
-                        style: TextStyle(fontSize: 16),
-                      )),
-                      Icon(
-                        Icons.navigate_next,
-                        color: Color(0xFFCDD4D3),
-                        size: 24,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 25),
-                  Divider(
-                    height: 0.5,
-                    color: Color(0xFFCDD4D3),
-                  ),
-                  SizedBox(height: 16),
-                  InkWell(
-                    onTap: () {
-                      controller.logout();
-                    },
-                    child: Row(
-                    children: [
-                      Icon(
-                        Icons.logout,
-                        color: Color(0xFF0064D2),
-                        size: 24,
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                          child: Text(
-                        "Đăng xuất",
-                        style: TextStyle(fontSize: 16),
-                      )),
-                      Icon(
-                        Icons.navigate_next,
-                        color: Color(0xFFCDD4D3),
-                        size: 24,
-                      ),
-                    ],
-                  ),
-                  ),
-                  
-                  SizedBox(height: 25),
-              
-                ])))
-      ],
-    )));
+                    ),
+                    SizedBox(height: 25),
+                  ])))
+        ],
+      );
+    })));
   }
 }
 
@@ -166,7 +193,7 @@ class ClinicInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final controller = ProfileController.instance;
     return Padding(
         padding: EdgeInsets.only(left: 24, right: 24, top: 24),
         child: Column(
@@ -283,16 +310,17 @@ class ClinicInfo extends StatelessWidget {
                   size: 24,
                 ),
                 SizedBox(width: 16),
+                Text("Đăng nhập bằng vân tay", style: TextStyle(fontSize: 16)),
                 Expanded(
-                    child: Text(
-                  "Đăng nhập vân tay",
-                  style: TextStyle(fontSize: 16),
-                )),
-                Icon(
-                  Icons.navigate_next,
-                  color: Color(0xFFCDD4D3),
-                  size: 24,
+                  child: SizedBox(),
                 ),
+                Obx(() => Switch(
+                      value: controller.isBiometricEnabled.value,
+                      onChanged: (value) => controller.toggleBiometric(value),
+                      activeColor: Color(0xFF0064D2),
+                      inactiveTrackColor: Color(0xFFCDD4D3),
+                      inactiveThumbColor: Colors.white,
+                    ))
               ],
             ),
             SizedBox(height: 25),
