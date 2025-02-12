@@ -7,11 +7,7 @@ class TransactionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    //print("hello");
-    //checkAuth(); // Kiểm tra token khi controller khởi tạo
   }
-
-
   RxList<DateTime> dialogCalendarPickerValue = [
     DateTime.now(),
     DateTime.now().add(const Duration(days: 5)),

@@ -1,8 +1,10 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kiwi_admin/Main/Transaction/TransactionController.dart';
 import 'package:kiwi_admin/Utility/Utility.dart';
+import 'package:lottie/lottie.dart';
 
 class TransactionScreens extends StatelessWidget {
   const TransactionScreens({super.key});
@@ -11,20 +13,43 @@ class TransactionScreens extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(TransactionController());
     final utility = UtilityController.instance;
+    final box = GetStorage();
+    bool hasToken = box.hasData('auth_token');
+    utility.isAuthenticated.value = !box.hasData('auth_token');
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
+          // print(hasToken);
           if (utility.isAuthenticated.value) {
             return Center(
-                child: CircularProgressIndicator()); // Hiển thị loading khi đang kiểm tra
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset('assets/gif/login.json',
+                    fit: BoxFit.contain, width: 160),
+                InkWell(
+                  onTap: () {
+                    utility.checkAuth();
+                  },
+                  child: Text("Ấn để đăng nhập",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF0D1634),
+                      )),
+                ),
+              ],
+            )); // Hiển thị loading khi đang kiểm tra
           }
           return Column(
             children: [
               Row(
                 children: [
                   Expanded(
+                      child: ColoredBox(
+                    color: Colors.white,
                     child: Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                        padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
                         child: InkWell(
                           onTap: () async {
                             await controller.showDialogSelectDate(context);
@@ -47,7 +72,7 @@ class TransactionScreens extends StatelessWidget {
                             );
                           }),
                         )),
-                  ),
+                  )),
                 ],
               ),
               Expanded(

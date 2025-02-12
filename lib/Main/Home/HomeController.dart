@@ -9,7 +9,7 @@ import 'package:kiwi_admin/Utility/Utility.dart';
 
 class HomeController extends GetxController {
   static HomeController get instance => Get.find();
-  final utility_controller = Get.put(UtilityController());
+  final utility_controller = UtilityController.instance;
   final pageController = PageController();
   Rx<int> currentPageIndex = 0.obs;
   @override

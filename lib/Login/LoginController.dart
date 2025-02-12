@@ -11,7 +11,7 @@ import 'package:kiwi_admin/Utility/Utility.dart';
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
   // ignore: non_constant_identifier_names
-  final utility_controller = Get.put(UtilityController());
+  final utility_controller = UtilityController.instance;
   Rx<bool> isPasswordVisible = false.obs;
   void navRegister() {
     Get.to(() => RegisterScreens());
@@ -35,7 +35,7 @@ class LoginController extends GetxController {
     try {
       utility_controller.showLoadingDialog();
       var response = await dio.request(
-        Config.API_BASE_URL+'/jwt-auth/v1/token',
+        Config.API_BASE_URL + '/jwt-auth/v1/token',
         options: Options(
           method: 'POST',
           headers: headers,
@@ -49,6 +49,7 @@ class LoginController extends GetxController {
         if (token != null) {
           final box = GetStorage();
           box.write('auth_token', token);
+          utility_controller.isAuthenticated.value = false;
           Get.back();
         }
       } else {

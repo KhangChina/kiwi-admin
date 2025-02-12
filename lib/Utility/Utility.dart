@@ -68,7 +68,7 @@ class UtilityController extends GetxController {
     );
   }
 
-   Rx<bool> isAuthenticated = true.obs;
+  Rx<bool> isAuthenticated = true.obs;
   Future<void> checkAuth() async {
     final box = GetStorage();
     bool hasToken = box.hasData('auth_token');
