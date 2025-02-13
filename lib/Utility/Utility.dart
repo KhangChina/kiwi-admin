@@ -116,4 +116,16 @@ class UtilityController extends GetxController {
       return inputDate; // Trả về ngày gốc nếu có lỗi
     }
   }
+
+  String getStatusText(dynamic status) {
+    Map<int, String> statusMap = {
+      1: "Sắp đến",
+      2: "Hoàn thành",
+      3: "Hủy",
+      4: "CheckIn",
+      5: "Tạm ngưng",
+    };
+
+    return statusMap[int.tryParse(status.toString())] ?? "Không xác định";
+  }
 }

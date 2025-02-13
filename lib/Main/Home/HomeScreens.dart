@@ -399,13 +399,6 @@ class ItemDoctorSkeleton extends StatelessWidget {
                           ),
                         ),
                       )),
-                  // Padding(
-                  //     padding: EdgeInsets.only(right: 6),
-                  //     child: Icon(
-                  //       Icons.saved_search,
-                  //       size: 20,
-                  //       color: Color(0xFF006FFD),
-                  //     ))
                 ],
               ),
               Row(
