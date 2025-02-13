@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kiwi_admin/Login/LoginScreens.dart';
 import 'package:lottie/lottie.dart';
+import 'package:intl/intl.dart';
 
 class UtilityController extends GetxController {
   static UtilityController get instance => Get.find();
@@ -81,6 +82,38 @@ class UtilityController extends GetxController {
       }); // Điều hướng đến màn hình đăng nhập
     } else {
       isAuthenticated.value = true;
+    }
+  }
+
+  String formatTime(String time) {
+    if (time.contains("am")) {
+      return time.replaceAll("am", "").trim() + " Sáng";
+    } else if (time.contains("pm")) {
+      return time.replaceAll("pm", "").trim() + " Chiều";
+    }
+    return time;
+  }
+
+  String formatDate(String inputDate) {
+    try {
+      // Chuyển chuỗi thành DateTime
+      DateTime date = DateFormat("d MMMM, yyyy").parse(inputDate);
+
+      // Định dạng thành dd/MM/yyyy
+      String formattedDate = DateFormat("dd/MM/yyyy").format(date);
+
+      // Lấy ngày hiện tại
+      String todayDate = DateFormat("dd/MM/yyyy").format(DateTime.now());
+
+      // Kiểm tra nếu ngày hẹn = ngày hôm nay
+      if (formattedDate == todayDate) {
+        return "$formattedDate - hôm nay khám";
+      }
+
+      return formattedDate;
+    } catch (e) {
+      print("Lỗi chuyển đổi ngày: $e");
+      return inputDate; // Trả về ngày gốc nếu có lỗi
     }
   }
 }
