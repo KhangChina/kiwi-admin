@@ -15,8 +15,8 @@ class CompleteHistoryScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final controller = Get.put(CompleteScreensController());
-     controller.getAllData(3);
+    final controller = Get.put(CompleteScreensController());
+    controller.getAllData(3);
     return Scaffold(
         body: SafeArea(
             child: Column(
@@ -51,34 +51,49 @@ class CompleteHistoryScreens extends StatelessWidget {
             ),
           ],
         ),
-        Expanded(child: Obx(() {
-          return RefreshIndicator(
-            color: Color(0xFF0064D2),
-            onRefresh: () async {
-              var end_date = DateFormat('yyyy-MM-dd')
-                  .format(controller.dialogCalendarPickerValue.value[1]);
-              var start_date = DateFormat('yyyy-MM-dd')
-                  .format(controller.dialogCalendarPickerValue.value[0]);
-              await controller.getDataTransaction(start_date, end_date, 1);
-            },
-            child: controller.isLoading.value
-                ? ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return ItemTransactionSkeleton();
-                    },
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: controller.itemsComplete.length,
-                    itemBuilder: (context, index) {
-                      final item = controller.itemsComplete[index];
-                      return ItemTransaction(item: item);
-                    },
-                  ),
-          );
-        }))
+        Expanded(
+          child: Obx(() {
+            return RefreshIndicator(
+              color: Color(0xFF0064D2),
+              onRefresh: () async {
+                var end_date = DateFormat('yyyy-MM-dd')
+                    .format(controller.dialogCalendarPickerValue.value[1]);
+                var start_date = DateFormat('yyyy-MM-dd')
+                    .format(controller.dialogCalendarPickerValue.value[0]);
+                await controller.getDataTransaction(start_date, end_date, 1);
+              },
+              child: controller.isLoading.value
+                  ? ListView.builder(
+                      padding: const EdgeInsets.all(20),
+                      itemCount: 3,
+                      itemBuilder: (context, index) {
+                        return ItemTransactionSkeleton();
+                      },
+                    )
+                  : controller.itemsComplete.isEmpty
+                      ? Center(
+                          child: Column(
+                          children: [
+                            Lottie.asset('assets/gif/data_not_found.json',
+                                fit: BoxFit.contain),
+                            Text(
+                              "Không có dữ liệu",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
+                            ),
+                          ],
+                        ))
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(20),
+                          itemCount: controller.itemsComplete.length,
+                          itemBuilder: (context, index) {
+                            final item = controller.itemsComplete[index];
+                            return ItemTransaction(item: item);
+                          },
+                        ),
+            );
+          }),
+        )
       ],
     )));
   }
@@ -205,14 +220,7 @@ class ItemTransactionSkeleton extends StatelessWidget {
                               ),
                             ),
                           )),
-                          InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.cancel,
-                              color: Color(0xFFE64B4B),
-                              size: 20,
-                            ),
-                          ),
+                          
                         ],
                       )),
                   Padding(
@@ -383,7 +391,7 @@ class ItemTransactionSkeleton extends StatelessWidget {
                       )),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0064D2),
                         elevation: 0,
@@ -448,7 +456,8 @@ class ItemTransaction extends StatelessWidget {
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              item["clinic_id"]["label"],
+                              utility
+                                  .formatNameClinic(item["clinic_id"]["label"]),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               textAlign: TextAlign.center,
@@ -460,14 +469,7 @@ class ItemTransaction extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 10),
-                          InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.cancel,
-                              color: Color(0xFFE64B4B),
-                              size: 20,
-                            ),
-                          ),
+                          
                         ],
                       )),
                   Padding(
@@ -598,7 +600,7 @@ class ItemTransaction extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0064D2),
+                        backgroundColor: Color.fromARGB(255, 65, 180, 37),
                         elevation: 0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8)),

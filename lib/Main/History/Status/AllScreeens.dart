@@ -51,34 +51,49 @@ class AllHistoryScreens extends StatelessWidget {
             ),
           ],
         ),
-        Expanded(child: Obx(() {
-          return RefreshIndicator(
-            color: Color(0xFF0064D2),
-            onRefresh: () async {
-              var end_date = DateFormat('yyyy-MM-dd')
-                  .format(controller.dialogCalendarPickerValue.value[1]);
-              var start_date = DateFormat('yyyy-MM-dd')
-                  .format(controller.dialogCalendarPickerValue.value[0]);
-              await controller.getDataTransaction(start_date, end_date, 1);
-            },
-            child: controller.isLoading.value
-                ? ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return ItemTransactionSkeleton();
-                    },
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: controller.itemsTransactionAll.length,
-                    itemBuilder: (context, index) {
-                      final item = controller.itemsTransactionAll[index];
-                      return ItemTransaction(item: item);
-                    },
-                  ),
-          );
-        }))
+        Expanded(
+          child: Obx(() {
+            return RefreshIndicator(
+              color: Color(0xFF0064D2),
+              onRefresh: () async {
+                var end_date = DateFormat('yyyy-MM-dd')
+                    .format(controller.dialogCalendarPickerValue.value[1]);
+                var start_date = DateFormat('yyyy-MM-dd')
+                    .format(controller.dialogCalendarPickerValue.value[0]);
+                await controller.getDataTransaction(start_date, end_date, 1);
+              },
+              child: controller.isLoading.value
+                  ? ListView.builder(
+                      padding: const EdgeInsets.all(20),
+                      itemCount: 3,
+                      itemBuilder: (context, index) {
+                        return ItemTransactionSkeleton();
+                      },
+                    )
+                  : controller.itemsTransactionAll.isEmpty
+                      ? Center(
+                          child: Column(
+                          children: [
+                            Lottie.asset('assets/gif/data_not_found.json',
+                                fit: BoxFit.contain),
+                            Text(
+                              "Không có dữ liệu",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
+                            ),
+                          ],
+                        ))
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(20),
+                          itemCount: controller.itemsTransactionAll.length,
+                          itemBuilder: (context, index) {
+                            final item = controller.itemsTransactionAll[index];
+                            return ItemTransaction(item: item);
+                          },
+                        ),
+            );
+          }),
+        )
       ],
     )));
   }
@@ -155,7 +170,8 @@ class ItemTransaction extends StatelessWidget {
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              item["clinic_id"]["label"],
+                              utility
+                                  .formatNameClinic(item["clinic_id"]["label"]),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               textAlign: TextAlign.center,
@@ -596,7 +612,7 @@ class ItemTransactionSkeleton extends StatelessWidget {
                       )),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0064D2),
                         elevation: 0,

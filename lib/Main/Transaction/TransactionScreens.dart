@@ -103,7 +103,7 @@ class TransactionScreens extends StatelessWidget {
                                 child: Column(
                                 children: [
                                   Lottie.asset('assets/gif/data_not_found.json',
-                                      fit: BoxFit.contain, ),
+                                      fit: BoxFit.contain ),
                                   Text(
                                     "Không có dữ liệu",
                                     style: TextStyle(
@@ -213,7 +213,7 @@ class ItemTransaction extends StatelessWidget {
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              item["clinic_id"]["label"],
+                              utility.formatNameClinic(item["clinic_id"]["label"]),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               textAlign: TextAlign.center,
@@ -662,7 +662,7 @@ class ItemTransactionSkeleton extends StatelessWidget {
                       )),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0064D2),
                         elevation: 0,

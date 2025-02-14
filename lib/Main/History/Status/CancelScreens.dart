@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi_admin/Main/History/Status/CancelController.dart';
 import 'package:kiwi_admin/Utility/Utility.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CancelHistoryScreens extends StatelessWidget {
@@ -12,7 +13,7 @@ class CancelHistoryScreens extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CancelScreensController());
-    controller.getAllData(3);
+    controller.getAllData(0);
     return Scaffold(
         body: SafeArea(
             child: Column(
@@ -47,34 +48,49 @@ class CancelHistoryScreens extends StatelessWidget {
             ),
           ],
         ),
-        Expanded(child: Obx(() {
-          return RefreshIndicator(
-            color: Color(0xFF0064D2),
-            onRefresh: () async {
-              var end_date = DateFormat('yyyy-MM-dd')
-                  .format(controller.dialogCalendarPickerValue.value[1]);
-              var start_date = DateFormat('yyyy-MM-dd')
-                  .format(controller.dialogCalendarPickerValue.value[0]);
-              await controller.getDataTransaction(start_date, end_date, 1);
-            },
-            child: controller.isLoading.value
-                ? ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return ItemTransactionSkeleton();
-                    },
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: controller.itemsCancel.length,
-                    itemBuilder: (context, index) {
-                      final item = controller.itemsCancel[index];
-                      return ItemTransaction(item: item);
-                    },
-                  ),
-          );
-        }))
+        Expanded(
+          child: Obx(() {
+            return RefreshIndicator(
+              color: Color(0xFF0064D2),
+              onRefresh: () async {
+                var end_date = DateFormat('yyyy-MM-dd')
+                    .format(controller.dialogCalendarPickerValue.value[1]);
+                var start_date = DateFormat('yyyy-MM-dd')
+                    .format(controller.dialogCalendarPickerValue.value[0]);
+                await controller.getDataTransaction(start_date, end_date, 1);
+              },
+              child: controller.isLoading.value
+                  ? ListView.builder(
+                      padding: const EdgeInsets.all(20),
+                      itemCount: 3,
+                      itemBuilder: (context, index) {
+                        return ItemTransactionSkeleton();
+                      },
+                    )
+                  : controller.itemsCancel.isEmpty
+                      ? Center(
+                          child: Column(
+                          children: [
+                            Lottie.asset('assets/gif/data_not_found.json',
+                                fit: BoxFit.contain),
+                            Text(
+                              "Không có dữ liệu",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
+                            ),
+                          ],
+                        ))
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(20),
+                          itemCount: controller.itemsCancel.length,
+                          itemBuilder: (context, index) {
+                            final item = controller.itemsCancel[index];
+                            return ItemTransaction(item: item);
+                          },
+                        ),
+            );
+          }),
+        )
       ],
     )));
   }
@@ -151,7 +167,8 @@ class ItemTransaction extends StatelessWidget {
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              item["clinic_id"]["label"],
+                              utility
+                                  .formatNameClinic(item["clinic_id"]["label"]),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               textAlign: TextAlign.center,
@@ -163,14 +180,6 @@ class ItemTransaction extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 10),
-                          InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.cancel,
-                              color: Color(0xFFE64B4B),
-                              size: 20,
-                            ),
-                          ),
                         ],
                       )),
                   Padding(
@@ -301,7 +310,7 @@ class ItemTransaction extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0064D2),
+                        backgroundColor: Color.fromARGB(255, 210, 0, 0),
                         elevation: 0,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -414,14 +423,6 @@ class ItemTransactionSkeleton extends StatelessWidget {
                               ),
                             ),
                           )),
-                          InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.cancel,
-                              color: Color(0xFFE64B4B),
-                              size: 20,
-                            ),
-                          ),
                         ],
                       )),
                   Padding(
@@ -592,7 +593,7 @@ class ItemTransactionSkeleton extends StatelessWidget {
                       )),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0064D2),
                         elevation: 0,

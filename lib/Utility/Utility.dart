@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:kiwi_admin/Login/LoginScreens.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
@@ -86,11 +87,7 @@ class UtilityController extends GetxController {
   }
 
   String formatTime(String time) {
-    if (time.contains("am")) {
-      return time.replaceAll("am", "").trim() + " Sáng";
-    } else if (time.contains("pm")) {
-      return time.replaceAll("pm", "").trim() + " Chiều";
-    }
+    time = time.replaceAll("am", "Sáng").replaceAll("pm", "Chiều");
     return time;
   }
 
@@ -121,11 +118,16 @@ class UtilityController extends GetxController {
     Map<int, String> statusMap = {
       1: "Sắp đến",
       2: "Tạm ngưng",
-      3: "Đã khám",
+      3: "Khách hàng đã khám",
       4: "Vào phòng khám",
-      0: "Hủy",
+      0: "Khách hàng đã Hủy",
     };
 
     return statusMap[int.tryParse(status.toString())] ?? "Không xác định";
+  }
+
+  String formatNameClinic(String encodedString) {
+    HtmlUnescape unescape = HtmlUnescape();
+    return unescape.convert(encodedString);
   }
 }
