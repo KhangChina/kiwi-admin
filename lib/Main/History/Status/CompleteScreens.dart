@@ -3,15 +3,20 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:intl/intl.dart';
 import 'package:kiwi_admin/Main/History/HistoryController.dart';
+import 'package:kiwi_admin/Main/History/Status/CompleteScreensController.dart';
+import 'package:kiwi_admin/Utility/Utility.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CompleteHistoryScreens extends StatelessWidget {
   const CompleteHistoryScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HistoryController());
+   final controller = Get.put(CompleteScreensController());
+     controller.getAllData(3);
     return Scaffold(
         body: SafeArea(
             child: Column(
@@ -46,15 +51,34 @@ class CompleteHistoryScreens extends StatelessWidget {
             ),
           ],
         ),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(20),
-            itemCount: 100,
-            itemBuilder: (context, index) {
-              return ItemTransaction();
+        Expanded(child: Obx(() {
+          return RefreshIndicator(
+            color: Color(0xFF0064D2),
+            onRefresh: () async {
+              var end_date = DateFormat('yyyy-MM-dd')
+                  .format(controller.dialogCalendarPickerValue.value[1]);
+              var start_date = DateFormat('yyyy-MM-dd')
+                  .format(controller.dialogCalendarPickerValue.value[0]);
+              await controller.getDataTransaction(start_date, end_date, 1);
             },
-          ),
-        )
+            child: controller.isLoading.value
+                ? ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return ItemTransactionSkeleton();
+                    },
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: controller.itemsComplete.length,
+                    itemBuilder: (context, index) {
+                      final item = controller.itemsComplete[index];
+                      return ItemTransaction(item: item);
+                    },
+                  ),
+          );
+        }))
       ],
     )));
   }
@@ -99,11 +123,51 @@ class TicketBorderPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
 
-class ItemTransaction extends StatelessWidget {
-  const ItemTransaction({super.key});
-
+class SearchInput extends StatelessWidget {
+  const SearchInput({super.key});
   @override
-  Widget build(Object context) {
+  Widget build(BuildContext context) {
+    return TextField(
+      style: TextStyle(
+        fontSize: 14,
+        fontFamily: 'Inter',
+      ),
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: Color(0xFF808080),
+              width: 1,
+            )),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF0064D2), width: 1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        prefixIcon: Transform.translate(
+            offset: Offset(0, 0),
+            child: SizedBox(
+              width: 24,
+              height: 24,
+              child: IconButton(
+                icon: Icon(
+                  Icons.badge,
+                  color: Color(0xFF0064D2),
+                ),
+                onPressed: () {},
+              ),
+            )),
+      ),
+    );
+  }
+}
+
+class ItemTransactionSkeleton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final utility = UtilityController.instance;
     return Padding(
       padding: EdgeInsets.only(bottom: 10),
       child: SizedBox(
@@ -123,12 +187,270 @@ class ItemTransaction extends StatelessWidget {
                               onTap: () {},
                               child: Icon(
                                 Icons.call,
-                                color: Color(0xFF733DF2),
+                                color: Color(0xFF0064D2),
                                 size: 20,
                               )),
                           Expanded(
+                              child: SizedBox(
+                            height: 14,
+                            width: 100,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          )),
+                          InkWell(
+                            onTap: () {},
+                            child: Icon(
+                              Icons.cancel,
+                              color: Color(0xFFE64B4B),
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      )),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    child: Row(children: [
+                      Expanded(
+                          child: SizedBox(
+                        height: 14,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      )),
+                      SizedBox(width: 100),
+                      Expanded(
+                          child: SizedBox(
+                        height: 14,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      )),
+                    ]),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    child: Row(children: [
+                      Expanded(
+                        child: Text(
+                          "Khách hàng",
+                          style: TextStyle(
+                            color: Color(0xFFD0D0D0),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.start, // Đưa chữ về bên phải
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          "Bác sĩ",
+                          style: TextStyle(
+                            color: Color(0xFFD0D0D0),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.end, // Đưa chữ về bên trái
+                        ),
+                      ),
+                    ]),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                    child: Row(children: [
+                      SizedBox(width: 90),
+                      Expanded(
+                          child: SizedBox(
+                        height: 14,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      )),
+                      SizedBox(width: 90),
+                    ]),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    child: Row(children: [
+                      SizedBox(width: 150),
+                      Expanded(
+                        child: SizedBox(
+                          height: 14,
+                          child: Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 150),
+                    ]),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, top: 7, bottom: 5),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: DottedLine(
+                            direction: Axis.horizontal,
+                            alignment: WrapAlignment.center,
+                            lineLength: double.infinity,
+                            lineThickness: 1.0,
+                            // dashLength: 1.0,
+                            dashColor: Color(0xFFD0D0D0),
+                            // dashGradient: [Colors.red, Colors.blue],
+                            dashRadius: 0.0,
+                            // dashGapLength: 1.0,
+                            dashGapColor: Colors.transparent,
+                            // dashGapGradient: [Colors.red, Colors.blue],
+                            dashGapRadius: 0.0,
+                          )),
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Dịch vụ: ",
+                                    style: TextStyle(color: Color(0xFFD0D0D0)),
+                                  ),
+                                  SizedBox(
+                                    width: 50,
+                                    height: 14,
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey[300]!,
+                                      highlightColor: Colors.grey[100]!,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                          Expanded(
+                              child: DottedLine(
+                            direction: Axis.horizontal,
+                            alignment: WrapAlignment.center,
+                            lineLength: double.infinity,
+                            lineThickness: 1.0,
+                            // dashLength: 1.0,
+                            dashColor: Color(0xFFD0D0D0),
+                            // dashGradient: [Colors.red, Colors.blue],
+                            dashRadius: 0.0,
+                            // dashGapLength: 1.0,
+                            dashGapColor: Colors.transparent,
+                            // dashGapGradient: [Colors.red, Colors.blue],
+                            dashGapRadius: 0.0,
+                          )),
+                        ],
+                      )),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF0064D2),
+                        elevation: 0,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Đang xử lý",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                            SizedBox(width: 5),
+                            Icon(
+                              Icons.cached,
+                              color: Colors.white,
+                            )
+                          ]),
+                    ),
+                  ])
+                ],
+              ))),
+    );
+  }
+}
+
+class ItemTransaction extends StatelessWidget {
+  const ItemTransaction({super.key, this.item});
+  final dynamic item;
+
+  @override
+  Widget build(Object context) {
+    final utility = UtilityController.instance;
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10),
+      child: SizedBox(
+          width: 305,
+          height: 192,
+          child: CustomPaint(
+              painter: TicketBorderPainter(),
+              child: Column(
+                children: [
+                  Padding(
+                      padding:
+                          EdgeInsets.only(top: 5, left: 5, right: 5, bottom: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                              onTap: () {},
+                              child: Icon(
+                                Icons.call,
+                                color: Color(0xFF0064D2),
+                                size: 20,
+                              )),
+                          SizedBox(width: 10),
+                          Expanded(
                             child: Text(
-                              "Phòng khám ABC",
+                              item["clinic_id"]["label"],
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Color(0xFF22313F),
@@ -137,6 +459,7 @@ class ItemTransaction extends StatelessWidget {
                                       FontWeight.bold), // Căn giữa văn bản
                             ),
                           ),
+                          SizedBox(width: 10),
                           InkWell(
                             onTap: () {},
                             child: Icon(
@@ -152,7 +475,7 @@ class ItemTransaction extends StatelessWidget {
                     child: Row(children: [
                       Expanded(
                         child: Text(
-                          "Khang Nguyễn",
+                          item["patient_id"]["label"],
                           style: TextStyle(
                             color: Color(0xFF22313F),
                             fontWeight: FontWeight.normal,
@@ -163,7 +486,7 @@ class ItemTransaction extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          "Trần Kinh Thành",
+                          item["doctor_id"]["label"],
                           style: TextStyle(
                             color: Color(0xFF22313F),
                             fontWeight: FontWeight.normal,
@@ -206,7 +529,9 @@ class ItemTransaction extends StatelessWidget {
                     child: Row(children: [
                       Expanded(
                         child: Text(
-                          "8:00 - 8:30 Sáng",
+                          utility.formatTime(item["appointment_start_time"] +
+                              " - " +
+                              item["appointment_end_time"]),
                           style: TextStyle(
                             color: Color(0xFF22313F),
                             fontWeight: FontWeight.bold,
@@ -222,7 +547,7 @@ class ItemTransaction extends StatelessWidget {
                     child: Row(children: [
                       Expanded(
                         child: Text(
-                          "03/02/2024 - hôm nay khám",
+                          utility.formatDate(item["appointment_start_date"]),
                           style: TextStyle(
                             color: Color(0xFFD0D0D0),
                             fontWeight: FontWeight.normal,
@@ -244,19 +569,15 @@ class ItemTransaction extends StatelessWidget {
                             alignment: WrapAlignment.center,
                             lineLength: double.infinity,
                             lineThickness: 1.0,
-                            // dashLength: 1.0,
                             dashColor: Color(0xFFD0D0D0),
-                            // dashGradient: [Colors.red, Colors.blue],
                             dashRadius: 0.0,
-                            // dashGapLength: 1.0,
                             dashGapColor: Colors.transparent,
-                            // dashGapGradient: [Colors.red, Colors.blue],
                             dashGapRadius: 0.0,
                           )),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
-                              "Dịch vụ: Tim mạch",
+                              "Dịch vụ: " + item["all_services"] ?? "Mặc định",
                               style: TextStyle(color: Color(0xFFD0D0D0)),
                             ),
                           ),
@@ -266,13 +587,9 @@ class ItemTransaction extends StatelessWidget {
                             alignment: WrapAlignment.center,
                             lineLength: double.infinity,
                             lineThickness: 1.0,
-                            // dashLength: 1.0,
                             dashColor: Color(0xFFD0D0D0),
-                            // dashGradient: [Colors.red, Colors.blue],
                             dashRadius: 0.0,
-                            // dashGapLength: 1.0,
                             dashGapColor: Colors.transparent,
-                            // dashGapGradient: [Colors.red, Colors.blue],
                             dashGapRadius: 0.0,
                           )),
                         ],
@@ -291,7 +608,7 @@ class ItemTransaction extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Tiếp nhận",
+                              utility.getStatusText(item["status"]),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -308,47 +625,6 @@ class ItemTransaction extends StatelessWidget {
                   ])
                 ],
               ))),
-    );
-  }
-}
-
-class SearchInput extends StatelessWidget {
-  const SearchInput({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: TextStyle(
-        fontSize: 14,
-        fontFamily: 'Inter',
-      ),
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-              color: Color(0xFF808080),
-              width: 1,
-            )),
-        contentPadding: EdgeInsets.symmetric(
-          vertical: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF0064D2), width: 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        prefixIcon: Transform.translate(
-            offset: Offset(0, 0),
-            child: SizedBox(
-              width: 24,
-              height: 24,
-              child: IconButton(
-                icon: Icon(
-                  Icons.badge,
-                  color: Color(0xFF0064D2),
-                ),
-                onPressed: () {},
-              ),
-            )),
-      ),
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi_admin/Main/History/HistoryController.dart';
+import 'package:kiwi_admin/Main/History/Status/AllScreensController.dart';
 import 'package:kiwi_admin/Utility/Utility.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
@@ -14,8 +15,8 @@ class AllHistoryScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HistoryController());
-    controller. getAllData(1);
+    final controller = Get.put(AllScreensController());
+    controller.getAllData(5);
     return Scaffold(
         body: SafeArea(
             child: Column(
@@ -50,35 +51,34 @@ class AllHistoryScreens extends StatelessWidget {
             ),
           ],
         ),
-         Expanded(child: Obx(() {
-                return RefreshIndicator(
-                  color: Color(0xFF0064D2),
-                  onRefresh: () async {
-                    var end_date = DateFormat('yyyy-MM-dd').format(controller.dialogCalendarPickerValue.value[1]);
-                    var start_date = DateFormat('yyyy-MM-dd')
-                        .format(controller.dialogCalendarPickerValue.value[0]);
-                    await controller.getDataTransaction(start_date, end_date, 1);
-                  },
-                  
-                  child: controller.isLoading.value
-                      ? ListView.builder(
-                          padding: const EdgeInsets.all(20),
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return ItemTransactionSkeleton();
-                          },
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(20),
-                          itemCount: controller.itemsTransactionAll.length,
-                          itemBuilder: (context, index) {
-                            final item = controller.itemsTransactionAll[index];
-                            return ItemTransaction(item: item);
-                          },
-                        ),
-                );
-
-              }))
+        Expanded(child: Obx(() {
+          return RefreshIndicator(
+            color: Color(0xFF0064D2),
+            onRefresh: () async {
+              var end_date = DateFormat('yyyy-MM-dd')
+                  .format(controller.dialogCalendarPickerValue.value[1]);
+              var start_date = DateFormat('yyyy-MM-dd')
+                  .format(controller.dialogCalendarPickerValue.value[0]);
+              await controller.getDataTransaction(start_date, end_date, 1);
+            },
+            child: controller.isLoading.value
+                ? ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return ItemTransactionSkeleton();
+                    },
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemCount: controller.itemsTransactionAll.length,
+                    itemBuilder: (context, index) {
+                      final item = controller.itemsTransactionAll[index];
+                      return ItemTransaction(item: item);
+                    },
+                  ),
+          );
+        }))
       ],
     )));
   }
@@ -126,7 +126,7 @@ class TicketBorderPainter extends CustomPainter {
 class ItemTransaction extends StatelessWidget {
   const ItemTransaction({super.key, this.item});
   final dynamic item;
- 
+
   @override
   Widget build(Object context) {
     final utility = UtilityController.instance;
@@ -315,7 +315,7 @@ class ItemTransaction extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                             utility.getStatusText(item["status"]),
+                              utility.getStatusText(item["status"]),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,

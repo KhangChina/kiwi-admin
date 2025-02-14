@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:kiwi_admin/Main/History/HistoryController.dart';
 import 'package:kiwi_admin/Main/History/Status/AllScreeens.dart';
 import 'package:kiwi_admin/Main/History/Status/CancelScreens.dart';
 import 'package:kiwi_admin/Main/History/Status/CompleteScreens.dart';
@@ -55,8 +57,8 @@ class HistoryScreens extends StatelessWidget {
           body: TabBarView(
             children: [
               AllHistoryScreens(),
+              CompleteHistoryScreens(),
               CancelHistoryScreens(),
-             CompleteHistoryScreens(),
             ],
           ),
         ),

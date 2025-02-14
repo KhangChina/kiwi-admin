@@ -120,10 +120,10 @@ class UtilityController extends GetxController {
   String getStatusText(dynamic status) {
     Map<int, String> statusMap = {
       1: "Sắp đến",
-      2: "Hoàn thành",
-      3: "Hủy",
-      4: "CheckIn",
-      5: "Tạm ngưng",
+      2: "Tạm ngưng",
+      3: "Đã khám",
+      4: "Vào phòng khám",
+      0: "Hủy",
     };
 
     return statusMap[int.tryParse(status.toString())] ?? "Không xác định";

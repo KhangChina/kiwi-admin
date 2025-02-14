@@ -6,9 +6,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi_admin/Utility/Config.dart';
 
-class HistoryController extends GetxController {
-  static HistoryController get instance => Get.find();
+class CompleteScreensController extends GetxController {
+  static CompleteScreensController get instance => Get.find();
   @override
+  void onInit() {
+    super.onInit();
+    getAllData(2);
+  }
 
   RxList<DateTime> dialogCalendarPickerValue = [
     DateTime.now(),
@@ -32,10 +36,11 @@ class HistoryController extends GetxController {
         dialogCalendarPickerValue[1] = results[1] as DateTime? ??
             DateTime.now().add(const Duration(days: 5));
 
-            var end_date = DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[1]);
-                    var start_date = DateFormat('yyyy-MM-dd')
-                        .format(dialogCalendarPickerValue.value[0]);
-                    await getDataTransaction(start_date, end_date, 1);
+        var end_date =
+            DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[1]);
+        var start_date =
+            DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[0]);
+        await getDataTransaction(start_date, end_date, 3);
       }
     }
     dialogCalendarPickerValue.refresh();
@@ -46,7 +51,6 @@ class HistoryController extends GetxController {
   }
 
   RxBool isLoading = false.obs;
-  RxList<dynamic> itemsTransactionAll = <dynamic>[].obs;
   RxList<dynamic> itemsComplete = <dynamic>[].obs;
   final box = GetStorage();
   getDataTransaction(start_date, end_date, status) async {
@@ -71,12 +75,7 @@ class HistoryController extends GetxController {
         var responseData = response.data;
         var data = responseData['data'];
         if (data != null) {
-          if (status == 1) {
-            itemsTransactionAll.assignAll(data);
-          }
-           if (status == 2) {
-            itemsComplete.assignAll(data);
-          }
+          itemsComplete.assignAll(data);
         }
       } else {
         print(response.statusMessage);
@@ -88,8 +87,10 @@ class HistoryController extends GetxController {
   }
 
   getAllData(status) {
-    var end_date = DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[1]);
-    var start_date = DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[0]);
+    var end_date =
+        DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[1]);
+    var start_date =
+        DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[0]);
     getDataTransaction(start_date, end_date, status);
   }
 }

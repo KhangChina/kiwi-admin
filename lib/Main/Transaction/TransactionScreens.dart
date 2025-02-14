@@ -78,35 +78,51 @@ class TransactionScreens extends StatelessWidget {
                   )),
                 ],
               ),
-              Expanded(child: Obx(() {
-                return RefreshIndicator(
-                  color: Color(0xFF0064D2),
-                  onRefresh: () async {
-                    var end_date = DateFormat('yyyy-MM-dd').format(controller.dialogCalendarPickerValue.value[1]);
-                    var start_date = DateFormat('yyyy-MM-dd')
-                        .format(controller.dialogCalendarPickerValue.value[0]);
-                    await controller.getDataTransaction(start_date, end_date, 1);
-                  },
-                  
-                  child: controller.isLoading.value
-                      ? ListView.builder(
-                          padding: const EdgeInsets.all(20),
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return ItemTransactionSkeleton();
-                          },
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(20),
-                          itemCount: controller.itemsTransaction.length,
-                          itemBuilder: (context, index) {
-                            final item = controller.itemsTransaction[index];
-                            return ItemTransaction(item: item);
-                          },
-                        ),
-                );
-
-              }))
+              Expanded(
+                child: Obx(() {
+                  return RefreshIndicator(
+                    color: Color(0xFF0064D2),
+                    onRefresh: () async {
+                      var end_date = DateFormat('yyyy-MM-dd').format(
+                          controller.dialogCalendarPickerValue.value[1]);
+                      var start_date = DateFormat('yyyy-MM-dd').format(
+                          controller.dialogCalendarPickerValue.value[0]);
+                      await controller.getDataTransaction(
+                          start_date, end_date, 1);
+                    },
+                    child: controller.isLoading.value
+                        ? ListView.builder(
+                            padding: const EdgeInsets.all(20),
+                            itemCount: 3,
+                            itemBuilder: (context, index) {
+                              return ItemTransactionSkeleton();
+                            },
+                          )
+                        : controller.itemsTransaction.isEmpty
+                            ? Center(
+                                child: Column(
+                                children: [
+                                  Lottie.asset('assets/gif/data_not_found.json',
+                                      fit: BoxFit.contain, ),
+                                  Text(
+                                    "Không có dữ liệu",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.grey),
+                                  ),
+                                ],
+                              ))
+                            : ListView.builder(
+                                padding: const EdgeInsets.all(20),
+                                itemCount: controller.itemsTransaction.length,
+                                itemBuilder: (context, index) {
+                                  final item =
+                                      controller.itemsTransaction[index];
+                                  return ItemTransaction(item: item);
+                                },
+                              ),
+                  );
+                }),
+              )
             ],
           );
         }),
