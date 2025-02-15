@@ -57,7 +57,7 @@ class CancelHistoryScreens extends StatelessWidget {
                     .format(controller.dialogCalendarPickerValue.value[1]);
                 var start_date = DateFormat('yyyy-MM-dd')
                     .format(controller.dialogCalendarPickerValue.value[0]);
-                await controller.getDataTransaction(start_date, end_date, 1);
+                await controller.getDataTransaction(start_date, end_date, 0);
               },
               child: controller.isLoading.value
                   ? ListView.builder(
@@ -78,6 +78,51 @@ class CancelHistoryScreens extends StatelessWidget {
                               style:
                                   TextStyle(fontSize: 16, color: Colors.grey),
                             ),
+                            SizedBox(height: 50),
+                            SizedBox(
+                                    width: 200,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        var end_date = DateFormat('yyyy-MM-dd')
+                                            .format(controller
+                                                .dialogCalendarPickerValue
+                                                .value[1]);
+                                        var start_date =
+                                            DateFormat('yyyy-MM-dd').format(
+                                                controller
+                                                    .dialogCalendarPickerValue
+                                                    .value[0]);
+                                        await controller.getDataTransaction(
+                                            start_date, end_date, 0);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Color(0xFF0064D2),
+                                        elevation: 0,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Tải lại",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontFamily: 'Inter',
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Icon(
+                                              Icons.loop,
+                                              color: Colors.white,
+                                            )
+                                          ]),
+                                    ),
+                                  )
                           ],
                         ))
                       : ListView.builder(
@@ -329,7 +374,7 @@ class ItemTransaction extends StatelessWidget {
                             ),
                             SizedBox(width: 5),
                             Icon(
-                              Icons.verified,
+                              Icons.cancel,
                               color: Colors.white,
                             )
                           ]),

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi_admin/Utility/Config.dart';
+
 class TransactionController extends GetxController {
   static TransactionController get instance => Get.find();
   final box = GetStorage();
@@ -12,9 +13,11 @@ class TransactionController extends GetxController {
   void onInit() {
     super.onInit();
     var start_date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    var end_date =  DateFormat('yyyy-MM-dd').format( DateTime.now().add(const Duration(days: 5)));
-    getDataTransaction(start_date,end_date,1);
+    var end_date = DateFormat('yyyy-MM-dd')
+        .format(DateTime.now().add(const Duration(days: 5)));
+    getDataTransaction(start_date, end_date, 1);
   }
+
   RxList<DateTime> dialogCalendarPickerValue = [
     DateTime.now(),
     DateTime.now().add(const Duration(days: 5)),
@@ -37,10 +40,10 @@ class TransactionController extends GetxController {
         dialogCalendarPickerValue[1] = results[1] as DateTime? ??
             DateTime.now().add(const Duration(days: 5));
       }
-    //Call API
+      //Call API
       var end_date = DateFormat('yyyy-MM-dd').format(results[1]!);
-      var start_date =  DateFormat('yyyy-MM-dd').format(results[0]!);
-      await getDataTransaction(start_date,end_date,1);
+      var start_date = DateFormat('yyyy-MM-dd').format(results[0]!);
+      await getDataTransaction(start_date, end_date, 1);
     }
     dialogCalendarPickerValue.refresh();
   }
@@ -48,10 +51,10 @@ class TransactionController extends GetxController {
   String formatDate(DateTime? date) {
     return date != null ? DateFormat('d/M/y').format(date) : 'N/A';
   }
+
   RxBool isLoading = false.obs;
   RxList<dynamic> itemsTransaction = <dynamic>[].obs;
-  Future<void> getDataTransaction(start_date,end_date,status)
-  async { 
+  Future<void> getDataTransaction(start_date, end_date, status) async {
     var token = box.read('auth_token');
     var headers = {
       'Content-Type': 'application/json',
@@ -61,7 +64,8 @@ class TransactionController extends GetxController {
     var dio = Dio();
     try {
       var response = await dio.request(
-        Config.API_BASE_URL + '/mobile/v1/appointment?start_date=${start_date}&end_date=${end_date}&status=${status}',
+        Config.API_BASE_URL +
+            '/mobile/v1/appointment?start_date=${start_date}&end_date=${end_date}&status=${status}',
         options: Options(
           method: 'GET',
           headers: headers,
@@ -81,5 +85,9 @@ class TransactionController extends GetxController {
       print(e);
       isLoading.value = false;
     }
+  }
+
+  void changeStatus() {
+    
   }
 }

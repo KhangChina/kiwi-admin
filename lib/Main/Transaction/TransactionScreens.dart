@@ -18,6 +18,9 @@ class TransactionScreens extends StatelessWidget {
     final box = GetStorage();
     bool hasToken = box.hasData('auth_token');
     utility.isAuthenticated.value = !box.hasData('auth_token');
+     var start_date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    var end_date =  DateFormat('yyyy-MM-dd').format( DateTime.now().add(const Duration(days: 5)));
+    controller.getDataTransaction(start_date,end_date,1);
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
@@ -103,12 +106,57 @@ class TransactionScreens extends StatelessWidget {
                                 child: Column(
                                 children: [
                                   Lottie.asset('assets/gif/data_not_found.json',
-                                      fit: BoxFit.contain ),
+                                      fit: BoxFit.contain),
                                   Text(
                                     "Không có dữ liệu",
                                     style: TextStyle(
                                         fontSize: 16, color: Colors.grey),
                                   ),
+                                  SizedBox(height: 50),
+                                  SizedBox(
+                                    width: 200,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        var end_date = DateFormat('yyyy-MM-dd')
+                                            .format(controller
+                                                .dialogCalendarPickerValue
+                                                .value[1]);
+                                        var start_date =
+                                            DateFormat('yyyy-MM-dd').format(
+                                                controller
+                                                    .dialogCalendarPickerValue
+                                                    .value[0]);
+                                        await controller.getDataTransaction(
+                                            start_date, end_date, 1);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Color(0xFF0064D2),
+                                        elevation: 0,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Tải lại",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontFamily: 'Inter',
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Icon(
+                                              Icons.loop,
+                                              color: Colors.white,
+                                            )
+                                          ]),
+                                    ),
+                                  )
                                 ],
                               ))
                             : ListView.builder(
@@ -213,7 +261,8 @@ class ItemTransaction extends StatelessWidget {
                           SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              utility.formatNameClinic(item["clinic_id"]["label"]),
+                              utility
+                                  .formatNameClinic(item["clinic_id"]["label"]),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               textAlign: TextAlign.center,

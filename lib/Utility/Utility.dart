@@ -130,4 +130,22 @@ class UtilityController extends GetxController {
     HtmlUnescape unescape = HtmlUnescape();
     return unescape.convert(encodedString);
   }
+
+  Icon getStatusIcon(dynamic status) {
+  Map<int, Map<String, dynamic>> statusMap = {
+    1: {"icon": Icons.access_time, "color": Colors.orange},      // Sắp đến
+    2: {"icon": Icons.pause_circle, "color": Colors.grey},       // Tạm ngưng
+    3: {"icon": Icons.check_circle, "color": Colors.green},      // Khách hàng đã khám
+    4: {"icon": Icons.medical_services, "color": Colors.blue},   // Vào phòng khám
+    0: {"icon": Icons.cancel, "color": Colors.red},              // Khách hàng đã Hủy
+  };
+
+  var statusInfo = statusMap[int.tryParse(status.toString())] ?? 
+                   {"icon": Icons.help, "color": Colors.black}; // Trạng thái không xác định
+
+  return Icon(
+    statusInfo["icon"],
+    color: statusInfo["color"],
+  );
+}
 }

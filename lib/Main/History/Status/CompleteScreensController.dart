@@ -11,7 +11,7 @@ class CompleteScreensController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getAllData(2);
+    getAllData(3);
   }
 
   RxList<DateTime> dialogCalendarPickerValue = [
