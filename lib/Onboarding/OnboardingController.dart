@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kiwi_admin/Main/LayoutMain.dart';
 
 class OnboardingController extends GetxController {
@@ -25,7 +26,7 @@ class OnboardingController extends GetxController {
       "text": "Tối ưu trải nghiệm của bạn với công nghệ tiên tiến."
     }
   ].obs;
-
+   final box = GetStorage();
   void updateCurrentPageChanged(index) {
     currentPageIndex.value = index;
   }
@@ -38,6 +39,7 @@ class OnboardingController extends GetxController {
       textLogin.value = "Trang chủ";
     }
     if (currentPageIndex.value >= (count - 1)) {
+      box.write('onboarding', true);
       Get.off(() => LayoutMainScreens());
       return;
     }
@@ -56,7 +58,7 @@ class OnboardingController extends GetxController {
   }
 
   void skipToMain() {
+    box.write('onboarding', true);
     Get.off(() => LayoutMainScreens());
-    return;
   }
 }

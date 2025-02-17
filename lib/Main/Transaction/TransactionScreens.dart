@@ -16,11 +16,9 @@ class TransactionScreens extends StatelessWidget {
     final controller = Get.put(TransactionController());
     final utility = UtilityController.instance;
     final box = GetStorage();
-    bool hasToken = box.hasData('auth_token');
+    // bool hasToken = box.hasData('auth_token');
     utility.isAuthenticated.value = !box.hasData('auth_token');
-     var start_date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    var end_date =  DateFormat('yyyy-MM-dd').format( DateTime.now().add(const Duration(days: 5)));
-    controller.getDataTransaction(start_date,end_date,1);
+    controller.getAllData(1);
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
@@ -236,6 +234,7 @@ class ItemTransaction extends StatelessWidget {
   @override
   Widget build(Object context) {
     final utility = UtilityController.instance;
+    final controller = TransactionController.instance;
     return Padding(
       padding: EdgeInsets.only(bottom: 10),
       child: SizedBox(
@@ -383,13 +382,9 @@ class ItemTransaction extends StatelessWidget {
                             alignment: WrapAlignment.center,
                             lineLength: double.infinity,
                             lineThickness: 1.0,
-                            // dashLength: 1.0,
                             dashColor: Color(0xFFD0D0D0),
-                            // dashGradient: [Colors.red, Colors.blue],
                             dashRadius: 0.0,
-                            // dashGapLength: 1.0,
                             dashGapColor: Colors.transparent,
-                            // dashGapGradient: [Colors.red, Colors.blue],
                             dashGapRadius: 0.0,
                           )),
                           Padding(
@@ -405,20 +400,20 @@ class ItemTransaction extends StatelessWidget {
                             alignment: WrapAlignment.center,
                             lineLength: double.infinity,
                             lineThickness: 1.0,
-                            // dashLength: 1.0,
                             dashColor: Color(0xFFD0D0D0),
-                            // dashGradient: [Colors.red, Colors.blue],
                             dashRadius: 0.0,
-                            // dashGapLength: 1.0,
                             dashGapColor: Colors.transparent,
-                            // dashGapGradient: [Colors.red, Colors.blue],
                             dashGapRadius: 0.0,
                           )),
                         ],
                       )),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        utility.showConfirmDialog(id: item, status: "3", onConfirm: (selectedItem, status) {
+                          controller.changeStatus(selectedItem["id"], status);
+                        });
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0064D2),
                         elevation: 0,

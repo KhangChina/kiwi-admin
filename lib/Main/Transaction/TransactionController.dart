@@ -87,7 +87,16 @@ class TransactionController extends GetxController {
     }
   }
 
-  void changeStatus() {
-    
+  void changeStatus(id, status) {
+    print(id);
+    print(status);
+  }
+
+  getAllData(status) {
+    var end_date =
+        DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[1]);
+    var start_date =
+        DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[0]);
+    getDataTransaction(start_date, end_date, status);
   }
 }
