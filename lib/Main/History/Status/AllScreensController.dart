@@ -40,7 +40,7 @@ class AllScreensController extends GetxController {
             DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[1]);
         var start_date =
             DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[0]);
-        await getDataTransaction(start_date, end_date, 1);
+        await getDataTransaction(start_date, end_date, 5);
       }
     }
     dialogCalendarPickerValue.refresh();

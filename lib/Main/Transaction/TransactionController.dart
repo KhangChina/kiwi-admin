@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -87,9 +88,40 @@ class TransactionController extends GetxController {
     }
   }
 
-  void changeStatus(id, status) {
-    print(id);
-    print(status);
+  Future<void> changeStatus(id, status) async {
+    var data = jsonEncode({
+      "appointment_id": id,
+      "appointment_status": status,
+    });
+    var token = box.read('auth_token');
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    };
+    var dio = Dio();
+    try {
+      var response = await dio.request(
+        Config.API_BASE_URL + '/mobile/v1/appointment/update-status',
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+        data: data,
+      );
+      if (response.statusCode == 200) {
+        var responseData = response.data;
+        print(responseData);
+        //var data = responseData['data'];
+        // if (data != null) {
+        //  print("ok");
+        // }
+        itemsTransaction.removeWhere((item) => item["id"] == id);
+      } else {
+        print(response.statusMessage);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   getAllData(status) {
