@@ -98,6 +98,7 @@ class TransactionController extends GetxController {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + token,
     };
+    isLoading.value = true;
     var dio = Dio();
     try {
       var response = await dio.request(
@@ -108,6 +109,7 @@ class TransactionController extends GetxController {
         ),
         data: data,
       );
+      isLoading.value = false;
       if (response.statusCode == 200) {
         var responseData = response.data;
         print(responseData);
@@ -120,6 +122,7 @@ class TransactionController extends GetxController {
         print(response.statusMessage);
       }
     } catch (e) {
+      isLoading.value = false;
       print(e);
     }
   }
