@@ -93,4 +93,5 @@ class AllScreensController extends GetxController {
         DateFormat('yyyy-MM-dd').format(dialogCalendarPickerValue.value[0]);
     getDataTransaction(start_date, end_date, status);
   }
+
 }

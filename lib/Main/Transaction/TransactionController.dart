@@ -91,7 +91,7 @@ class TransactionController extends GetxController {
   Future<void> changeStatus(id, status) async {
     var data = jsonEncode({
       "appointment_id": id,
-      "appointment_status": status,
+      "appointment_status": status.toString(),
     });
     var token = box.read('auth_token');
     var headers = {

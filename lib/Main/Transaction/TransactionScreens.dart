@@ -274,7 +274,15 @@ class ItemTransaction extends StatelessWidget {
                           ),
                           SizedBox(width: 10),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              utility.showConfirmDialog(
+                                  id: item,
+                                  status: "0",
+                                  onConfirm: (selectedItem, status) {
+                                    controller.changeStatus(
+                                        selectedItem["id"], status);
+                                  });
+                            },
                             child: Icon(
                               Icons.cancel,
                               color: Color(0xFFE64B4B),
@@ -410,9 +418,13 @@ class ItemTransaction extends StatelessWidget {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     ElevatedButton(
                       onPressed: () {
-                        utility.showConfirmDialog(id: item, status: "3", onConfirm: (selectedItem, status) {
-                          controller.changeStatus(selectedItem["id"], status);
-                        });
+                        utility.showConfirmDialog(
+                            id: item,
+                            status: "3",
+                            onConfirm: (selectedItem, status) {
+                              controller.changeStatus(
+                                  selectedItem["id"], status);
+                            });
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF0064D2),
